@@ -27,4 +27,9 @@ public class BoardServiceImpl implements BoardService {
         ).getId();
         return new BoardWriteDto(id);
     }
+
+    @Override
+    public List<Board> list() {
+        return boardRepository.findAll();
+    }
 }

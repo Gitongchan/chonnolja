@@ -23,4 +23,9 @@ public class BoardController {
     public BoardWriteDto write(Board board) {
         return boardService.write(board);
     }
+
+    @GetMapping("/list")
+    public List<Board> list() {
+        return boardService.list();
+    }
 }
