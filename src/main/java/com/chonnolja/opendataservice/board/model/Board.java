@@ -17,10 +17,10 @@ public class Board {
     private Long id;
 
     //title, content notnull로 설정
-    @Column(name = "title", length = 100, nullable = false)
+    @Column(name = "title", length = 100)
     private String title;
 
-    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     //setter 대신 사용
