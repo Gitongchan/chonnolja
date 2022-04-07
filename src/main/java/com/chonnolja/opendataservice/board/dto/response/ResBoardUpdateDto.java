@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardWriteDto {
+public class ResBoardUpdateDto {
 
     private Long id;
     private String message;
 
-    public BoardWriteDto(Long id) {
+    public ResBoardUpdateDto(Long id) {
         this.id = id;
-        this.message = "게시글 작성 성공";
+        this.message = "게시글 수정 성공";
     }
 }

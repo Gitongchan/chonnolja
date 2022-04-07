@@ -1,23 +1,16 @@
 package com.chonnolja.opendataservice.board.dto;
 
-import com.chonnolja.opendataservice.board.model.Board;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor
 public class BoardDto {
 
+    // @AllArgsConstructor로 모든 필드의 값을 파라미터로 받는 생성자 생성하여 form값 받아옴
     private Long id;
     private String title;
+    private String writer;
     private String content;
-
-    public BoardDto(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
 }

@@ -16,8 +16,10 @@ public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "writer")
+    private String writer;
     //title, content notnull로 설정
-    @Column(name = "title", length = 100)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "content", columnDefinition = "TEXT")
@@ -25,8 +27,9 @@ public class Board {
 
     //setter 대신 사용
     @Builder
-    public Board(Long id, String title, String content) {
+    public Board(Long id, String writer,String title, String content) {
         this.id = id;
+        this.writer = writer;
         this.title = title;
         this.content = content;
     }
