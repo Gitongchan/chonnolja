@@ -1,6 +1,9 @@
 package com.chonnolja.opendataservice.user.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,12 +14,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserJoinDto {
+public class UserInfoDto {
     
     private Long id;
     
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "아이디는 특수문자를 제외한 2~10자리여야 합니다.")
     private String userid;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
@@ -26,7 +28,7 @@ public class UserJoinDto {
 
     @NotBlank(message = "사용자명은 필수 입력 값입니다.")
     @Size(max=20, message="이름의 최대 길이는 20자 입니다.")
-    private String username;
+    private String name;
 
     @NotBlank(message = "핸드폰번호는 필수 입력 값입니다.")
     @Pattern(regexp="^[0-9]+$",message = "핸드폰번호는 숫자만 허용합니다.")

@@ -1,4 +1,4 @@
-package com.chonnolja.opendataservice.controller;
+package com.chonnolja.opendataservice.page.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
