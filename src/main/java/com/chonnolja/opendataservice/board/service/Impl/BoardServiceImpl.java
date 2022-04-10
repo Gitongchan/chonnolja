@@ -1,6 +1,6 @@
 package com.chonnolja.opendataservice.board.service.Impl;
 
-import com.chonnolja.opendataservice.board.dto.BoardDto;
+import com.chonnolja.opendataservice.board.dto.request.ReqBoardWriteDto;
 import com.chonnolja.opendataservice.board.dto.response.ResBoardUpdateDto;
 import com.chonnolja.opendataservice.board.dto.response.ResBoardWriteDto;
 import com.chonnolja.opendataservice.board.model.Board;
@@ -17,21 +17,22 @@ public class BoardServiceImpl implements BoardService {
 
     @Autowired private final BoardRepository boardRepository;
 
+    //게시판 목록
     @Override
     public List<Board> list() {
         return boardRepository.findAll();
     }
 
     @Override
-    public ResBoardWriteDto write(BoardDto boardDto) {
+    public ResBoardWriteDto write(ReqBoardWriteDto boardDto) {
         final Long id = boardRepository.save(
                 Board.builder()
-                        .id(boardDto.getId())
-                        .title(boardDto.getTitle())
-                        .writer(boardDto.getWriter())
-                        .content(boardDto.getContent())
+                        .bd_id(boardDto.getBd_id())
+                        .bd_title(boardDto.getBd_title())
+                        .bd_writer(boardDto.getBd_writer())
+                        .bd_content(boardDto.getBd_content())
                         .build()
-        ).getId();
+        ).getBd_id();
         return new ResBoardWriteDto(id);
     }
 

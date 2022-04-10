@@ -1,5 +1,5 @@
 package com.chonnolja.opendataservice.board.controller;
-import com.chonnolja.opendataservice.board.dto.BoardDto;
+import com.chonnolja.opendataservice.board.dto.request.ReqBoardWriteDto;
 import com.chonnolja.opendataservice.board.dto.response.ResBoardWriteDto;
 import com.chonnolja.opendataservice.board.model.Board;
 import com.chonnolja.opendataservice.board.service.BoardService;
@@ -23,7 +23,7 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public ResBoardWriteDto write(BoardDto BoardDto) {
+    public ResBoardWriteDto write(ReqBoardWriteDto BoardDto) {
         return boardService.write(BoardDto);
     }
     
