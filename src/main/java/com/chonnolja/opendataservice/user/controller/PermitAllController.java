@@ -1,9 +1,10 @@
 package com.chonnolja.opendataservice.user.controller;
 
+import com.chonnolja.opendataservice.user.service.UserService;
 import com.chonnolja.opendataservice.user.dto.request.UserInfoDto;
 import com.chonnolja.opendataservice.user.dto.response.ResDupliCheckDto;
+import com.chonnolja.opendataservice.user.dto.response.ResUserIdDto;
 import com.chonnolja.opendataservice.util.responseDto.ResResultDto;
-import com.chonnolja.opendataservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class PermitAllController {
+
     @Autowired
     private final UserService userService;
 
@@ -45,4 +47,17 @@ public class PermitAllController {
     public ResDupliCheckDto emailCheck(@RequestParam("email") String email){
         return new ResDupliCheckDto(userService.userIdCheck(email));
     }
+
+    //id찾기
+    @GetMapping("/userid_find")
+    public ResUserIdDto findUserid(@RequestBody UserInfoDto userInfoDto){
+        String result = userService.useridFind(userInfoDto);
+        System.out.println(result);
+        return result == null ?
+                new ResUserIdDto(null,"아이디 찾기 실패.") : new ResUserIdDto(result,"아이디 찾기 성공.");
+    }
+
+
+    //pw찾기
+
 }
