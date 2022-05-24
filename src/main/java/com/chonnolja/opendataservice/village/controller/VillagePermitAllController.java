@@ -3,11 +3,15 @@ package com.chonnolja.opendataservice.village.controller;
 import com.chonnolja.opendataservice.user.dto.response.ResDupliCheckDto;
 import com.chonnolja.opendataservice.user.service.UserService;
 import com.chonnolja.opendataservice.util.responseDto.ResResultDto;
+import com.chonnolja.opendataservice.village.dto.reponse.ResVillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.request.CheckVillageDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageUserInfoDto;
 import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -15,6 +19,16 @@ import org.springframework.web.bind.annotation.*;
 public class VillagePermitAllController {
     @Autowired private final VillageService villageService;
     @Autowired private final UserService userService;
+
+    //사업자 회원가입전 체험마을 확인
+    @GetMapping("/check")
+    public List<ResVillageInfoDto> villageRegisterCheck(@RequestBody CheckVillageDto checkVillageDto){
+
+        if(villageService.villageRegisterCheck(checkVillageDto)==null){
+            return null;
+        }
+        return villageService.villageRegisterCheck(checkVillageDto);
+    }
 
     //업체명 중복 체크
     @GetMapping("/name_check")

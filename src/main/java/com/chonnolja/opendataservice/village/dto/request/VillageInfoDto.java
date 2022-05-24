@@ -52,13 +52,13 @@ public class VillageInfoDto {
     private String villageProviderCode;
 
     //제공기관명
-    private String villagePoviderName;
+    private String villageProviderName;
 
     //마을 계좌
     private String villageBanknum;
 
-    //마을 사업자 사용가능 여부
-    private boolean villageEnabled;
+    //마을 상태
+    private String villageStatus;
 
     //마을 사업자 탈퇴 날짜
     private LocalDateTime villageDeletedDate;

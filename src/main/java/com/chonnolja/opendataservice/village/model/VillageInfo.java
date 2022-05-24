@@ -69,16 +69,16 @@ public class VillageInfo {
     private String villageProviderCode;
 
     //제공기관명
-    @Column(name = "village_povider_name")
-    private String villagePoviderName;
+    @Column(name = "village_provider_name")
+    private String villageProviderName;
 
     //마을 계좌
     @Column(name = "village_banknum")
     private String villageBanknum;
 
-    //마을 사업자 사용가능 여부
-    @Column(name = "village_enabled")
-    private boolean villageEnabled;
+    //마을 상태 (회원가입 신청,정지,이용중,이용전 등등)
+    @Column(name = "village_status")
+    private String villageStatus;
 
     //마을 사업자 탈퇴 날짜
     @Column(name = "village_deleted_date")
@@ -104,8 +104,8 @@ public class VillageInfo {
     public VillageInfo(Long villageId, UserInfo userInfo, String villageName, String villageRepName,
                        String villageNum, String villageAdrMain, String villageAdrSub,
                        String villageStreetAdr, String villageLatitude, String villageLongitude,
-                       String villageUrl, String villageProviderCode, String villagePoviderName,
-                       String villageBanknum, boolean villageEnabled, LocalDateTime villageDeletedDate,
+                       String villageUrl, String villageProviderCode, String villageProviderName,
+                       String villageBanknum, String villageStatus, LocalDateTime villageDeletedDate,
                        String villageActivity, String villagePhoto, String villageDescription,
                        String villageNotify) {
         this.villageId = villageId;
@@ -120,9 +120,9 @@ public class VillageInfo {
         this.villageLongitude = villageLongitude;
         this.villageUrl = villageUrl;
         this.villageProviderCode = villageProviderCode;
-        this.villagePoviderName = villagePoviderName;
+        this.villageProviderName = villageProviderName;
         this.villageBanknum = villageBanknum;
-        this.villageEnabled = villageEnabled;
+        this.villageStatus = villageStatus;
         this.villageDeletedDate = villageDeletedDate;
         this.villageActivity = villageActivity;
         this.villagePhoto = villagePhoto;

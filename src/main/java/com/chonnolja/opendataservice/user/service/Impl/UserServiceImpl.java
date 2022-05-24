@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
             UserInfo registerUserInfo = userRepository.findById(userInfo.getId()).get();
 
             userInfoDto.setRole("ROLE_MANAGER"); // 권한 MANAGER로 변경
-            villageInfoDto.setVillageEnabled(true); // 사업자 서비스 이용 가능
+            villageInfoDto.setVillageStatus("사용중"); // 사업자 서비스 이용 가능
 
             userRepository.save(
                     UserInfo.builder()
@@ -212,12 +212,8 @@ public class UserServiceImpl implements UserService {
                             .userInfo(registerUserInfo)
                             .villageName(villageInfoDto.getVillageName())
                             .villageNum(villageInfoDto.getVillageNum())
-                            .villageAdrNum(villageInfoDto.getVillageAdrNum())
-                            .villageLotAdr(villageInfoDto.getVillageLotAdr())
-                            .villageStreetAdr(villageInfoDto.getVillageStreetAdr())
-                            .villageDetailAdr(villageInfoDto.getVillageDetailAdr())
                             .villageBanknum(villageInfoDto.getVillageBanknum())
-                            .villageEnabled(villageInfoDto.isVillageEnabled())
+                            .villageStatus(villageInfoDto.getVillageStatus())
                             .build()
             );            return registerUserInfo.getId();
 
@@ -240,12 +236,12 @@ public class UserServiceImpl implements UserService {
             return -1L; //로그인된 사용자가 사업자 등록이 안되어있음
         }
 
-        VillageInfo restoreComUserInfo = villageRepository.findByUserInfo(restoreUserInfo).get();
+        VillageInfo restorevillUserinfo = villageRepository.findByUserInfo(restoreUserInfo).get();
 
 
-        if (!restoreComUserInfo.isVillageEnabled()) {
+        if (restorevillUserinfo.getVillageStatus().equals("탈퇴")) {
             userInfoDto.setRole("ROLE_MANAGER");
-            villageInfoDto.setVillageEnabled(true);
+            villageInfoDto.setVillageStatus("사용중");
             villageInfoDto.setVillageDeletedDate(null);
 
             userRepository.save(
@@ -266,16 +262,12 @@ public class UserServiceImpl implements UserService {
             );
             villageRepository.save(
                     VillageInfo.builder()
-                            .villageId(restoreComUserInfo.getVillageId())
+                            .villageId(restorevillUserinfo.getVillageId())
                             .userInfo(restoreUserInfo)
-                            .villageName(restoreComUserInfo.getVillageName())
-                            .villageNum(restoreComUserInfo.getVillageNum())
-                            .villageAdrNum(restoreComUserInfo.getVillageAdrNum())
-                            .villageLotAdr(restoreComUserInfo.getVillageLotAdr())
-                            .villageStreetAdr(restoreComUserInfo.getVillageStreetAdr())
-                            .villageDetailAdr(restoreComUserInfo.getVillageDetailAdr())
-                            .villageBanknum(restoreComUserInfo.getVillageBanknum())
-                            .villageEnabled(villageInfoDto.isVillageEnabled())
+                            .villageName(restorevillUserinfo.getVillageName())
+                            .villageNum(restorevillUserinfo.getVillageNum())
+                            .villageBanknum(restorevillUserinfo.getVillageBanknum())
+                            .villageStatus(villageInfoDto.getVillageStatus())
                             .villageDeletedDate(villageInfoDto.getVillageDeletedDate())
                             .build()
             );

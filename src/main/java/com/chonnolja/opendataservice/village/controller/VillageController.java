@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class VillageController {
 
     @Autowired private final VillageService villageService;
+    
+
 
     //사업자 탈퇴
     @PutMapping("/deleted")
