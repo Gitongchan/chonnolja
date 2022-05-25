@@ -49,26 +49,32 @@ public class VillageServiceImpl implements VillageService {
         }
         return villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdr
                         (checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr())
-                .stream()   //stream을 통해 List를 읽고
+                .stream()   //stream을 통해 List를 스트림으로
                 .map(ResVillageInfoDto::new)  //map()은 원소를 가공 .map()을 이용해 원하는 객체에 다시 담아준다
-                .collect(Collectors.toList()); //Collectors.toList 를 이용해 리스트로 리턴 받을 수 있습니다
+                .collect(Collectors.toList()); //Collectors.toList 로 map을 list로 변환후 리스트로 리턴
     }
 
 
     //사업자 회원 등록
     @Override
-    public Long villageRegister(VillageUserInfoDto villageUserInfoDto) {
+    public Long villageRegister(Long villageRegisterId,VillageUserInfoDto villageUserInfoDto) {
 
+        //비밀번호 암호화
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String rawPassword = villageUserInfoDto.getPassword();
         villageUserInfoDto.setPassword(bCryptPasswordEncoder.encode(rawPassword));
 
         //가입시 자동 설정
         villageUserInfoDto.setRole("ROLE_MANAGER");
-
         villageUserInfoDto.setUserEnabled(true);
 
-            System.out.println("실행됨");
+        //검색된 여러가지 정보중 선택된 한가지 마을정보의 아이값을 가져와서 사용한다
+        if(villageRepository.findByVillageId(villageRegisterId).isEmpty()){
+           return -1L;
+        }
+        VillageInfo registerVillInfo = villageRepository.findByVillageId(villageRegisterId).get();
+
+        //저장 로직
             UserInfo singUpUserInfo =
                     userRepository.save(
                             UserInfo.builder()
@@ -83,6 +89,29 @@ public class VillageServiceImpl implements VillageService {
                                     .userLotAdr(villageUserInfoDto.getUserLotAdr())
                                     .userDetailAdr(villageUserInfoDto.getUserDetailAdr())
                                     .userEnabled(villageUserInfoDto.isUserEnabled())
+                                    .build()
+                    );
+                        
+                    villageUserInfoDto.setVillageStatus("사용중");
+                
+                    villageRepository.save(
+                            VillageInfo.builder()
+                                    .villageId(registerVillInfo.getVillageId())
+                                    .userInfo(singUpUserInfo)
+                                    .villageName(registerVillInfo.getVillageName())
+                                    .villageRepName(registerVillInfo.getVillageRepName())
+                                    .villageNum(registerVillInfo.getVillageNum())
+                                    .villageAdrMain(registerVillInfo.getVillageAdrMain())
+                                    .villageAdrSub(registerVillInfo.getVillageName())
+                                    .villageStreetAdr(registerVillInfo.getVillageStreetAdr())
+                                    .villageLatitude(registerVillInfo.getVillageLatitude())
+                                    .villageLongitude(registerVillInfo.getVillageLongitude())
+                                    .villageActivity(registerVillInfo.getVillageActivity())
+                                    .villageBanknum(villageUserInfoDto.getVillageBanknum())
+                                    .villageStatus(villageUserInfoDto.getVillageStatus())
+                                    .villagePhoto(villageUserInfoDto.getVillagePhoto())
+                                    .villageDescription(villageUserInfoDto.getVillageDescription())
+                                    .villageNotify(villageUserInfoDto.getVillageNotify())
                                     .build()
                     );
 

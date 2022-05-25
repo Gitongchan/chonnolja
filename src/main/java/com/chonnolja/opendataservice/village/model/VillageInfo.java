@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 public class VillageInfo {
 
+    /* 이미 등록된 데이터 */
     //사업자등록번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,6 +73,12 @@ public class VillageInfo {
     @Column(name = "village_provider_name")
     private String villageProviderName;
 
+    //체험 활동 목록
+    @Column(name = "village_activity")
+    private String villageActivity;
+
+    /* 매칭되어 새로 입력받는 데이터 */
+
     //마을 계좌
     @Column(name = "village_banknum")
     private String villageBanknum;
@@ -83,10 +90,6 @@ public class VillageInfo {
     //마을 사업자 탈퇴 날짜
     @Column(name = "village_deleted_date")
     private LocalDateTime villageDeletedDate;
-
-    //체험 활동 목록
-    @Column(name = "village_activity")
-    private String villageActivity;
 
     //체험마을 대표 사진
     @Column(name = "village_photo")

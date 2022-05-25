@@ -14,6 +14,8 @@ public interface VillageRepository extends JpaRepository<VillageInfo,Integer> {
 
     Optional<VillageInfo> findByUserInfo(UserInfo userInfo);
 
+    Optional<VillageInfo> findByVillageId(Long villageId);
+
     List<VillageInfo> findByVillageRepNameAndVillageNumAndVillageStreetAdr(
             String villageRepName,String villageNum,String VillageStreetAdr
     );

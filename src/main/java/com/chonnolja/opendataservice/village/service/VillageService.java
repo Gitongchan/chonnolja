@@ -18,7 +18,7 @@ public interface VillageService {
     Integer villageNameCheck(String villageName);
 
     //사업자 회원 등록
-    Long villageRegister(VillageUserInfoDto villageUserInfoDto);
+    Long villageRegister(Long villageRegisterId,VillageUserInfoDto villageUserInfoDto);
 
     //사업자 회사 정보 수정
     Long villageUpdate(UserInfo userInfo, VillageInfoDto villageInfoDto);
