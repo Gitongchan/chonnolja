@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface VillageService {
     //사업자탈퇴
-    Long villageDeleted(UserInfo userInfo, VillageUserInfoDto villageUserInfoDto);
+    Long villageDeleted(UserInfo userInfo);
 
     //업체명 체크
     Integer villageNameCheck(String villageName);

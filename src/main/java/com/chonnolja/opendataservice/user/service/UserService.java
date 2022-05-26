@@ -25,10 +25,10 @@ public interface UserService extends UserDetailsService {
     UserInfo userInfoCheck(UserInfo userInfo);
 
     //사업자 등록 (회원으로 등록된 사용자의 사업자 등록)
-    Long villageRegister(UserInfo userInfo,UserInfoDto userInfoDto, VillageInfoDto villageInfoDto);
+    Long villageRegister(UserInfo userInfo,Long villageId,VillageInfoDto villageInfoDto);
 
     //사업자 복구
-    Long villageRestore(UserInfo userInfo, UserInfoDto userInfoDto, VillageInfoDto villageInfoDto);
+    Long villageRestore(UserInfo userInfo, UserInfoDto userInfoDto);
 
     //아이디 찾기
     String useridFind(UserInfoDto userInfoDto);

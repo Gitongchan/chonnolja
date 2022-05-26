@@ -56,16 +56,17 @@ public class UserController{
     }
 
     //사업자 회원 가입
-    @PostMapping("/village_register")
+    @PostMapping("/village_register/{villageId}")
     public ResResultDto villageRegister(@LoginUser UserInfo userInfo ,
-                                        UserInfoDto userInfoDto, @RequestBody VillageInfoDto villageInfoDto){
+                                        @PathVariable("villageId") Long villageId,
+                                        @RequestBody VillageInfoDto villageInfoDto){
 
         //회사명 중복 체크
         if(villageService.villageNameCheck(villageInfoDto.getVillageName()).equals(-1)){
             return new ResResultDto(-3L,"사업자 등록 실패, 이미 사용되고있는 회사명입니다");
         }
 
-        Long result = userService.villageRegister(userInfo,userInfoDto, villageInfoDto);
+        Long result = userService.villageRegister(userInfo,villageId,villageInfoDto);
 
         if(result == -1L) {
             return new ResResultDto(result,"사업자 등록 실패, 유저 정보를 받아올 수 없습니다.");
@@ -81,9 +82,9 @@ public class UserController{
 
     //탈퇴한 사업자 복구
     @PutMapping("/villageinfo_restore")
-    public ResResultDto villageRestore(@LoginUser UserInfo userInfo , UserInfoDto userInfoDto, VillageInfoDto villageInfoDto){
+    public ResResultDto villageRestore(@LoginUser UserInfo userInfo , UserInfoDto userInfoDto){
 
-        Long result = userService.villageRestore(userInfo,userInfoDto, villageInfoDto);
+        Long result = userService.villageRestore(userInfo,userInfoDto);
         return result == -1L ?
                 new ResResultDto(result,"사업자 정보 복구 실패.") : new ResResultDto(result,"사업자 정보 복구 성공.");
     }

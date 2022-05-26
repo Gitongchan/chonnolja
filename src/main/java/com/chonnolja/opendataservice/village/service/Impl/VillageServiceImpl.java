@@ -65,10 +65,6 @@ public class VillageServiceImpl implements VillageService {
         String rawPassword = villageUserInfoDto.getPassword();
         villageUserInfoDto.setPassword(bCryptPasswordEncoder.encode(rawPassword));
 
-        //가입시 자동 설정
-        villageUserInfoDto.setRole("ROLE_MANAGER");
-        villageUserInfoDto.setUserEnabled(true);
-
         //검색된 여러가지 정보중 선택된 한가지 마을정보의 아이값을 가져와서 사용한다
         if(villageRepository.findByVillageId(villageRegisterId).isEmpty()){
            return -1L;
@@ -85,17 +81,14 @@ public class VillageServiceImpl implements VillageService {
                                     .name(villageUserInfoDto.getName())
                                     .phone(villageUserInfoDto.getPhone())
                                     .email(villageUserInfoDto.getEmail())
-                                    .role(villageUserInfoDto.getRole())
+                                    .role("ROLE_MANAGER")//가입시 자동 설정
                                     .userAdrNum(villageUserInfoDto.getUserAdrNum())
                                     .userStreetAdr(villageUserInfoDto.getUserStreetAdr())
                                     .userLotAdr(villageUserInfoDto.getUserLotAdr())
                                     .userDetailAdr(villageUserInfoDto.getUserDetailAdr())
-                                    .userEnabled(villageUserInfoDto.isUserEnabled())
+                                    .userEnabled(true)//가입시 자동 설정
                                     .build()
                     );
-                        
-                    villageUserInfoDto.setVillageStatus(VillageStatus.USE);
-                
                     villageRepository.save(
                             VillageInfo.builder()
                                     .villageId(registerVillInfo.getVillageId())
@@ -113,7 +106,7 @@ public class VillageServiceImpl implements VillageService {
                                     .villageProviderName(registerVillInfo.getVillageProviderName())
                                     .villageUrl(registerVillInfo.getVillageUrl())
                                     .villageBanknum(villageUserInfoDto.getVillageBanknum())
-                                    .villageStatus(villageUserInfoDto.getVillageStatus())
+                                    .villageStatus(VillageStatus.USE)//가입시 자동 설정
                                     .villagePhoto(villageUserInfoDto.getVillagePhoto())
                                     .villageDescription(villageUserInfoDto.getVillageDescription())
                                     .villageNotify(villageUserInfoDto.getVillageNotify())
@@ -132,9 +125,28 @@ public class VillageServiceImpl implements VillageService {
             VillageInfo updateVillageInfo = villageRepository.findByUserInfo(userInfo).orElseGet(
                     ()-> VillageInfo.builder().build()
             );
+            // 그외의 정보들은 문의를 통해서만 변경 가능하다
             villageRepository.save(
                     VillageInfo.builder()
-
+                            .villageId(updateVillageInfo.getVillageId())
+                            .userInfo(updateVillageInfo.getUserInfo())
+                            .villageName(updateVillageInfo.getVillageName())
+                            .villageRepName(updateVillageInfo.getVillageRepName())
+                            .villageNum(updateVillageInfo.getVillageNum())
+                            .villageAdrMain(updateVillageInfo.getVillageAdrMain())
+                            .villageAdrSub(updateVillageInfo.getVillageAdrSub())
+                            .villageStreetAdr(updateVillageInfo.getVillageStreetAdr())
+                            .villageLatitude(updateVillageInfo.getVillageLatitude())
+                            .villageLongitude(updateVillageInfo.getVillageLongitude())
+                            .villageActivity(villageInfoDto.getVillageActivity())
+                            .villageProviderCode(updateVillageInfo.getVillageProviderCode())
+                            .villageProviderName(updateVillageInfo.getVillageProviderName())
+                            .villageUrl(villageInfoDto.getVillageUrl())
+                            .villageBanknum(villageInfoDto.getVillageBanknum())
+                            .villageStatus(updateVillageInfo.getVillageStatus())
+                            .villagePhoto(villageInfoDto.getVillagePhoto())
+                            .villageDescription(villageInfoDto.getVillageDescription())
+                            .villageNotify(villageInfoDto.getVillageNotify())
                             .build()
             );
             return updateVillageInfo.getVillageId();
@@ -153,14 +165,14 @@ public class VillageServiceImpl implements VillageService {
 
     //사업자탈퇴
     @Override
-    public Long villageDeleted(UserInfo userInfo, VillageUserInfoDto villageUserInfoDto) {
+    public Long villageDeleted(UserInfo userInfo) {
 
-        if(userRepository.findById(userInfo.getId()).isPresent() && userInfo.getRole().equals("ROLE_MANAGER")) {
+        if(userRepository.findByIdAndRole(userInfo.getId(),"ROLE_MANAGER").isEmpty()) {
+            return -1L;
+        }
 
-            UserInfo villUserinfo = userRepository.findById(userInfo.getId()).get();
-
-
-            villageUserInfoDto.setRole("ROLE_USER");
+        UserInfo villUserinfo = userRepository.findByIdAndRole(userInfo.getId(),"ROLE_MANAGER").get();
+        
 
             userRepository.save(
                     UserInfo.builder()
@@ -176,26 +188,38 @@ public class VillageServiceImpl implements VillageService {
                             .userStreetAdr(villUserinfo.getUserStreetAdr())
                             .userDetailAdr(villUserinfo.getUserDetailAdr())
                             .userEnabled(villUserinfo.isUserEnabled())
-                            .role(villageUserInfoDto.getRole())
+                            .role("ROLE_USER")  //권한 변경
                             .build()
             );
 
-            VillageInfo deleteVillageInfo = villageRepository.findByUserInfo(userInfo).orElseGet(
+        VillageInfo deleteVillageInfo = villageRepository.findByUserInfo(userInfo).orElseGet(
                     ()-> VillageInfo.builder().build()
-            );
+        );
             villageRepository.save(
                     VillageInfo.builder()
                             .villageId(deleteVillageInfo.getVillageId())
-                            .userInfo(userInfo)
+                            .userInfo(deleteVillageInfo.getUserInfo())
                             .villageName(deleteVillageInfo.getVillageName())
+                            .villageRepName(deleteVillageInfo.getVillageRepName())
                             .villageNum(deleteVillageInfo.getVillageNum())
-                            .villageBanknum(deleteVillageInfo.getVillageBanknum())
-                            .villageDeletedDate(LocalDateTime.now())
+                            .villageAdrMain(deleteVillageInfo.getVillageAdrMain())
+                            .villageAdrSub(deleteVillageInfo.getVillageAdrSub())
+                            .villageStreetAdr(deleteVillageInfo.getVillageStreetAdr())
+                            .villageLatitude(deleteVillageInfo.getVillageLatitude())
+                            .villageLongitude(deleteVillageInfo.getVillageLongitude())
+                            .villageActivity(deleteVillageInfo.getVillageActivity())
+                            .villageProviderCode(deleteVillageInfo.getVillageProviderCode())
+                            .villageProviderName(deleteVillageInfo.getVillageProviderName())
+                            .villageUrl(deleteVillageInfo.getVillageUrl())
+                            .villageBanknum(null)
+                            .villageStatus(VillageStatus.DELETE)
+                            .villagePhoto(null)
+                            .villageDescription(null)
+                            .villageNotify(null)
+                            .villageDeletedDate(LocalDateTime.now())  //탈퇴한 시간
                             .build()
-
             );
             return userInfo.getId();
-        }
-        return -1L;
+
     }
 }
