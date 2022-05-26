@@ -2,6 +2,7 @@ package com.chonnolja.opendataservice.village.model;
 
 
 import com.chonnolja.opendataservice.user.model.UserInfo;
+import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -84,8 +85,9 @@ public class VillageInfo {
     private String villageBanknum;
 
     //마을 상태 (회원가입 신청,정지,이용중,이용전 등등)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "village_status")
-    private String villageStatus;
+    private VillageStatus villageStatus;
 
     //마을 사업자 탈퇴 날짜
     @Column(name = "village_deleted_date")
@@ -108,7 +110,7 @@ public class VillageInfo {
                        String villageNum, String villageAdrMain, String villageAdrSub,
                        String villageStreetAdr, String villageLatitude, String villageLongitude,
                        String villageUrl, String villageProviderCode, String villageProviderName,
-                       String villageBanknum, String villageStatus, LocalDateTime villageDeletedDate,
+                       String villageBanknum, VillageStatus villageStatus, LocalDateTime villageDeletedDate,
                        String villageActivity, String villagePhoto, String villageDescription,
                        String villageNotify) {
         this.villageId = villageId;

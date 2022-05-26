@@ -2,6 +2,7 @@ package com.chonnolja.opendataservice.village.dto.reponse;
 
 
 import com.chonnolja.opendataservice.user.model.UserInfo;
+import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,7 +59,7 @@ public class ResVillageInfoDto {
     private String villageBanknum;
 
     //마을 사업자 사용가능 여부
-    private String villageStatus;
+    private VillageStatus villageStatus;
 
     //마을 사업자 탈퇴 날짜
     private LocalDateTime villageDeletedDate;

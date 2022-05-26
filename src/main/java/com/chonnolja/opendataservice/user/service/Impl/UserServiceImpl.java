@@ -1,6 +1,7 @@
 package com.chonnolja.opendataservice.user.service.Impl;
 
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import com.chonnolja.opendataservice.village.repository.VillageRepository;
 import com.chonnolja.opendataservice.user.dto.request.UserAdapter;
@@ -188,7 +189,7 @@ public class UserServiceImpl implements UserService {
             UserInfo registerUserInfo = userRepository.findById(userInfo.getId()).get();
 
             userInfoDto.setRole("ROLE_MANAGER"); // 권한 MANAGER로 변경
-            villageInfoDto.setVillageStatus("사용중"); // 사업자 서비스 이용 가능
+            villageInfoDto.setVillageStatus(VillageStatus.USE); // 사업자 서비스 이용 가능
 
             userRepository.save(
                     UserInfo.builder()
@@ -239,9 +240,9 @@ public class UserServiceImpl implements UserService {
         VillageInfo restorevillUserinfo = villageRepository.findByUserInfo(restoreUserInfo).get();
 
 
-        if (restorevillUserinfo.getVillageStatus().equals("탈퇴")) {
+        if (restorevillUserinfo.getVillageStatus()==null) {
             userInfoDto.setRole("ROLE_MANAGER");
-            villageInfoDto.setVillageStatus("사용중");
+            villageInfoDto.setVillageStatus(VillageStatus.USE);
             villageInfoDto.setVillageDeletedDate(null);
 
             userRepository.save(

@@ -16,8 +16,9 @@ public interface VillageRepository extends JpaRepository<VillageInfo,Integer> {
 
     Optional<VillageInfo> findByVillageId(Long villageId);
 
-    List<VillageInfo> findByVillageRepNameAndVillageNumAndVillageStreetAdr(
-            String villageRepName,String villageNum,String VillageStreetAdr
+    //외래키가 등록 되지 않은 마을만 검색한다
+    List<VillageInfo> findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo(
+            String villageRepName, String villageNum, String villageStreetAdr, UserInfo userInfo
     );
 
 }

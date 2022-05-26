@@ -58,7 +58,7 @@ public class VillageInfoDto {
     private String villageBanknum;
 
     //마을 상태
-    private String villageStatus;
+    private VillageStatus villageStatus;
 
     //마을 사업자 탈퇴 날짜
     private LocalDateTime villageDeletedDate;

@@ -36,8 +36,8 @@ public class VillagePermitAllController {
         return new ResDupliCheckDto(villageService.villageNameCheck(villageName));
     }
     //사업자 회원가입
-    @PostMapping("/signup")
-    public ResResultDto villageRegister(@RequestParam("villageRegisterId") Long villageRegisterId,
+    @PostMapping("/signup/{villageId}")
+    public ResResultDto villageRegister(@PathVariable("villageId") Long villageId,
                                         @RequestBody VillageUserInfoDto villageUserInfoDto){
 
         Integer idCheckResult = userService.userIdCheck(villageUserInfoDto.getUserid());
@@ -47,9 +47,9 @@ public class VillagePermitAllController {
         if(idCheckResult.equals(-1)||emailCheckResult.equals(-1)) {
             return new ResResultDto(-1L,"회원가입 실패, 아이디,이메일을 다시 확인하세요.");
         }else{
-            Long result = villageService.villageRegister(villageRegisterId,villageUserInfoDto);
-            return result == -1L ?
-                    new ResResultDto(result,"사업자 등록 실패.") : new ResResultDto(result,"사업자 등록 성공.");
+            Long result = villageService.villageRegister(villageId,villageUserInfoDto);
+            return result > 0 ?
+                    new ResResultDto(result,"사업자 등록 성공.") : new ResResultDto(result,"사업자 등록 실패.");
         }
     }
 }

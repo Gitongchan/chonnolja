@@ -7,6 +7,7 @@ import com.chonnolja.opendataservice.user.service.UserService;
 import com.chonnolja.opendataservice.village.dto.reponse.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.CheckVillageDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import com.chonnolja.opendataservice.village.dto.request.VillageUserInfoDto;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import com.chonnolja.opendataservice.village.repository.VillageRepository;
@@ -41,14 +42,14 @@ public class VillageServiceImpl implements VillageService {
     //체험마을 사업자 등록 전 확인
     @Override
     public List<ResVillageInfoDto> villageRegisterCheck(CheckVillageDto checkVillageDto){
-        if(villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdr(
-                checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr()
+        if(villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo(
+                checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr(),null
             ).isEmpty()
         ){
             return null;
         }
-        return villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdr
-                        (checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr())
+        return villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo
+                        (checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr(),null)
                 .stream()   //stream을 통해 List를 스트림으로
                 .map(ResVillageInfoDto::new)  //map()은 원소를 가공 .map()을 이용해 원하는 객체에 다시 담아준다
                 .collect(Collectors.toList()); //Collectors.toList 로 map을 list로 변환후 리스트로 리턴
@@ -72,6 +73,7 @@ public class VillageServiceImpl implements VillageService {
         if(villageRepository.findByVillageId(villageRegisterId).isEmpty()){
            return -1L;
         }
+
         VillageInfo registerVillInfo = villageRepository.findByVillageId(villageRegisterId).get();
 
         //저장 로직
@@ -92,7 +94,7 @@ public class VillageServiceImpl implements VillageService {
                                     .build()
                     );
                         
-                    villageUserInfoDto.setVillageStatus("사용중");
+                    villageUserInfoDto.setVillageStatus(VillageStatus.USE);
                 
                     villageRepository.save(
                             VillageInfo.builder()
@@ -102,11 +104,14 @@ public class VillageServiceImpl implements VillageService {
                                     .villageRepName(registerVillInfo.getVillageRepName())
                                     .villageNum(registerVillInfo.getVillageNum())
                                     .villageAdrMain(registerVillInfo.getVillageAdrMain())
-                                    .villageAdrSub(registerVillInfo.getVillageName())
+                                    .villageAdrSub(registerVillInfo.getVillageAdrSub())
                                     .villageStreetAdr(registerVillInfo.getVillageStreetAdr())
                                     .villageLatitude(registerVillInfo.getVillageLatitude())
                                     .villageLongitude(registerVillInfo.getVillageLongitude())
                                     .villageActivity(registerVillInfo.getVillageActivity())
+                                    .villageProviderCode(registerVillInfo.getVillageProviderCode())
+                                    .villageProviderName(registerVillInfo.getVillageProviderName())
+                                    .villageUrl(registerVillInfo.getVillageUrl())
                                     .villageBanknum(villageUserInfoDto.getVillageBanknum())
                                     .villageStatus(villageUserInfoDto.getVillageStatus())
                                     .villagePhoto(villageUserInfoDto.getVillagePhoto())
