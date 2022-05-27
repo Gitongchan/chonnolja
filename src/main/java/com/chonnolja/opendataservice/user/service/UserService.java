@@ -1,6 +1,6 @@
 package com.chonnolja.opendataservice.user.service;
 
-import com.chonnolja.opendataservice.company.dto.request.CompanyUserInfoDto;
+import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
 import com.chonnolja.opendataservice.user.dto.request.UserInfoDto;
 import com.chonnolja.opendataservice.user.model.UserInfo;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,13 +17,20 @@ public interface UserService extends UserDetailsService {
 
     //이메일 중복 체크
     Integer emailCheck(String email);
-
-    //사업자 회원 등록
-    Long companyRegister(UserInfo userInfo, CompanyUserInfoDto companyUserInfoDto);
     
     //회원 탈퇴
     Long userDeleted(UserInfo userInfo,UserInfoDto userInfoDto);
 
-    Integer companyNameCheck(String companyName);
+    //회원 정보 조회
+    UserInfo userInfoCheck(UserInfo userInfo);
+
+    //사업자 등록 (회원으로 등록된 사용자의 사업자 등록)
+    Long villageRegister(UserInfo userInfo,Long villageId,VillageInfoDto villageInfoDto);
+
+    //사업자 복구
+    Long villageRestore(UserInfo userInfo, UserInfoDto userInfoDto);
+
+    //아이디 찾기
+    String useridFind(UserInfoDto userInfoDto);
 
 }
