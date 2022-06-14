@@ -3,17 +3,17 @@ package com.chonnolja.opendataservice.board.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Map;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResBoardWriteDto {
+public class ResCommentListDto {
 
-    private Long id;
-    private String message;
-
-    public ResBoardWriteDto(Long id) {
-        this.id = id;
-        this.message = "게시글 작성 성공";
-    }
+    //댓글 정보
+    private List<Map<String, Object>> comments;
 }

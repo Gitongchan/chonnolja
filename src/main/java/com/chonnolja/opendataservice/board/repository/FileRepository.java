@@ -1,7 +1,17 @@
 package com.chonnolja.opendataservice.board.repository;
 
-import com.chonnolja.opendataservice.board.model.File;
+
+import com.chonnolja.opendataservice.board.model.Board;
+import com.chonnolja.opendataservice.board.model.Board_Files;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FileRepository extends JpaRepository<File, Long> {
+import java.util.List;
+
+public interface FileRepository extends JpaRepository<Board_Files, Long> {
+
+    //게시글 조회 시 bd_id 값 찾기
+    List<Board_Files> findByBoard(Board board);
+
+    //파일 삭제
+    void deleteByBoardAndFileSaveName(Board board, String fileSaveName);
 }
