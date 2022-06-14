@@ -1,4 +1,4 @@
-package com.chonnolja.opendataservice.controller;
+package com.chonnolja.opendataservice.page.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +13,19 @@ public class PageController {
     public String join(){
         return "join";
     }
-    @GetMapping("/loginPage")
-    public String login(){
-        return "login";
-    }
     @GetMapping("/test/index")
     public String testindex(){
         return "pages/index";
+    }
+
+    @GetMapping("/test/val")
+    public String testval(){
+        return "pages/register";
+    }
+
+    @GetMapping("/test/mainfunc")
+    public String testmain(){
+        return "pages/mainfunction";
     }
 
 
