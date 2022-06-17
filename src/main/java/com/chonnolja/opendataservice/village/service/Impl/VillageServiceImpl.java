@@ -22,6 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -253,5 +256,50 @@ public class VillageServiceImpl implements VillageService {
       });
       return villageInfoDto;
     }
+
+    //개별 마을 조회
+    @Override
+    public ResVillageInfoDto villageInfo(Long villageId, HttpServletRequest request, HttpServletResponse response) {
+        
+        VillageInfo villageInfo = villageRepository.findByVillageId(villageId).orElseThrow(
+                () -> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다")
+        );
+
+        //조회수 증가, 쿠키로 중복 증가 방지
+        //쿠키가 있으면 그 쿠키가 해당 게시글 쿠키인지 확인하고 아니라면 조회수 올리고 setvalue로 해당 게시글의 쿠키 값도 넣어줘야함
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+
+        //기존에 쿠키를 가지고 있다면 해당 쿠키를 oldCookie에 담아줌
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("villageView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        //oldCookie가 쿠키를 가지고 있으면 oldCookie의 value값에 현재 게시글의 id가 없다면 조회수 증가
+        //그리고 현제 게시글 id를 쿠키에 다시 담아서 보냄
+        //쿠키가 없다면 새로 생성 후 조회 수 증가
+        if(oldCookie != null) {
+            if(!oldCookie.getValue().contains("[" + villageId.toString() + "]")) {
+                villageRepository.updateVillageView(villageId);
+                oldCookie.setValue(oldCookie.getValue() + "[" + villageId + "]");
+                oldCookie.setMaxAge(60 * 60);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            Cookie postCookie = new Cookie("villageView", "[" + villageId + "]");
+            villageRepository.updateVillageView(villageId);
+            //쿠키 사용시간 1시간 설정
+            postCookie.setMaxAge(60 * 60);
+            System.out.println("쿠키 이름 : " + postCookie.getValue());
+            response.addCookie(postCookie);
+        }
+        
+        return new ResVillageInfoDto(villageInfo);
+    }
+
 
 }

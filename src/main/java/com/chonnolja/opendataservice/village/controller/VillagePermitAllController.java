@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -71,4 +73,12 @@ public class VillagePermitAllController {
                                                    ){
         return villageService.villageList(pageable, page, villageActivity, villageName, address, sort, size);
     }
+
+    //마을 조회
+    @GetMapping("/item/{id}")
+    public ResVillageInfoDto villageInfo(@PathVariable("id")Long id, HttpServletRequest request,
+                                         HttpServletResponse response){
+        return villageService.villageInfo(id,request,response);
+    }
+
 }
