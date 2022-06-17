@@ -1,24 +1,29 @@
 package com.chonnolja.opendataservice.village.service.Impl;
 
 
+import com.chonnolja.opendataservice.exception.CustomException;
 import com.chonnolja.opendataservice.user.model.UserInfo;
 import com.chonnolja.opendataservice.user.repository.UserRepository;
-import com.chonnolja.opendataservice.user.service.UserService;
-import com.chonnolja.opendataservice.village.dto.reponse.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.CheckVillageDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import com.chonnolja.opendataservice.village.dto.request.VillageUserInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoListDto;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import com.chonnolja.opendataservice.village.repository.VillageRepository;
 import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +31,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class VillageServiceImpl implements VillageService {
-    @Autowired private final VillageRepository villageRepository;
-    @Autowired private final UserRepository userRepository;
-    @Autowired private final UserService userService;
+     private final VillageRepository villageRepository;
+     private final UserRepository userRepository;
+
 
     //업체명 중복 체크
     @Override
@@ -56,6 +61,7 @@ public class VillageServiceImpl implements VillageService {
     }
 
 
+
     //사업자 회원 등록
     @Override
     public Long villageRegister(Long villageRegisterId,VillageUserInfoDto villageUserInfoDto) {
@@ -65,12 +71,9 @@ public class VillageServiceImpl implements VillageService {
         String rawPassword = villageUserInfoDto.getPassword();
         villageUserInfoDto.setPassword(bCryptPasswordEncoder.encode(rawPassword));
 
-        //검색된 여러가지 정보중 선택된 한가지 마을정보의 아이값을 가져와서 사용한다
-        if(villageRepository.findByVillageId(villageRegisterId).isEmpty()){
-           return -1L;
-        }
-
-        VillageInfo registerVillInfo = villageRepository.findByVillageId(villageRegisterId).get();
+        VillageInfo registerVillInfo = villageRepository.findByVillageId(villageRegisterId).orElseThrow(
+                () -> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다.")
+        );
 
         //저장 로직
             UserInfo singUpUserInfo =
@@ -105,7 +108,7 @@ public class VillageServiceImpl implements VillageService {
                                     .villageProviderCode(registerVillInfo.getVillageProviderCode())
                                     .villageProviderName(registerVillInfo.getVillageProviderName())
                                     .villageUrl(registerVillInfo.getVillageUrl())
-                                    .villageBanknum(villageUserInfoDto.getVillageBanknum())
+                                    .villageBankNum(villageUserInfoDto.getVillageBanknum())
                                     .villageStatus(VillageStatus.USE)//가입시 자동 설정
                                     .villagePhoto(villageUserInfoDto.getVillagePhoto())
                                     .villageDescription(villageUserInfoDto.getVillageDescription())
@@ -142,7 +145,8 @@ public class VillageServiceImpl implements VillageService {
                             .villageProviderCode(updateVillageInfo.getVillageProviderCode())
                             .villageProviderName(updateVillageInfo.getVillageProviderName())
                             .villageUrl(villageInfoDto.getVillageUrl())
-                            .villageBanknum(villageInfoDto.getVillageBanknum())
+                            .villageBankNum(villageInfoDto.getVillageBanknum())
+                            .villageBankName(villageInfoDto.getVillageName())
                             .villageStatus(updateVillageInfo.getVillageStatus())
                             .villagePhoto(villageInfoDto.getVillagePhoto())
                             .villageDescription(villageInfoDto.getVillageDescription())
@@ -167,12 +171,9 @@ public class VillageServiceImpl implements VillageService {
     @Override
     public Long villageDeleted(UserInfo userInfo) {
 
-        if(userRepository.findByIdAndRole(userInfo.getId(),"ROLE_MANAGER").isEmpty()) {
-            return -1L;
-        }
-
-        UserInfo villUserinfo = userRepository.findByIdAndRole(userInfo.getId(),"ROLE_MANAGER").get();
-        
+        UserInfo villUserinfo = userRepository.findByIdAndRole(userInfo.getId(),"ROLE_MANAGER").orElseThrow(
+                ()->new CustomException.ResourceNotFoundException("유저 정보를 찾을 수 없습니다.")
+        );
 
             userRepository.save(
                     UserInfo.builder()
@@ -211,7 +212,8 @@ public class VillageServiceImpl implements VillageService {
                             .villageProviderCode(deleteVillageInfo.getVillageProviderCode())
                             .villageProviderName(deleteVillageInfo.getVillageProviderName())
                             .villageUrl(deleteVillageInfo.getVillageUrl())
-                            .villageBanknum(null)
+                            .villageBankNum(null)
+                            .villageBankName(null)
                             .villageStatus(VillageStatus.DELETE)
                             .villagePhoto(null)
                             .villageDescription(null)
@@ -222,4 +224,34 @@ public class VillageServiceImpl implements VillageService {
             return userInfo.getId();
 
     }
+    
+    //체험마을 리스트 (페이징)
+    @Override
+    public List<ResVillageInfoListDto> villageList(Pageable pageable, int page,String villageActivity ,String villageName, String address, String sort, int size) {
+        pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+
+        Page<VillageInfo> villageInfoPage = villageRepository.findByVillageList(pageable,villageActivity,villageName,address);
+
+        List<VillageInfo> villageInfoList = villageInfoPage.getContent();
+        List<ResVillageInfoListDto> villageInfoDto = new ArrayList<>();
+
+      villageInfoList.forEach(entity->{
+          ResVillageInfoListDto listDto = new ResVillageInfoListDto();
+          listDto.setVillageId(entity.getVillageId());
+          listDto.setVillageName(entity.getVillageName());
+          listDto.setVillageAdrMain(entity.getVillageAdrMain());
+          listDto.setVillageAdrSub(entity.getVillageAdrSub());
+          listDto.setVillageStreetAdr(entity.getVillageStreetAdr());
+          listDto.setVillageLatitude(entity.getVillageLatitude());
+          listDto.setVillageLongitude(entity.getVillageLongitude());
+          listDto.setVillageActivity(entity.getVillageActivity());
+          listDto.setVillagePhoto(entity.getVillagePhoto());
+          listDto.setVillageViewCnt(entity.getVillageViewCnt());
+          listDto.setTotalPage(villageInfoPage.getTotalPages());
+          listDto.setTotalElement(villageInfoPage.getTotalElements());
+          villageInfoDto.add(listDto);
+      });
+      return villageInfoDto;
+    }
+
 }
