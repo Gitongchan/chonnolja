@@ -7,7 +7,6 @@ import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageUserInfoDto;
 import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoListDto;
-import com.chonnolja.opendataservice.village.model.VillageInfo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +28,7 @@ public interface VillageService {
     Long villageUpdate(UserInfo userInfo,Long villageId ,VillageInfoDto villageInfoDto,String deletedThumb,MultipartFile thumb);
 
     //사업자 회사 정보 조회
-    VillageInfo villageInfoCheck(UserInfo userInfo);
+    ResVillageInfoDto villageInfoCheck(UserInfo userInfo);
     
     //체험마을 사업자 등록 전 확인
     List<ResVillageInfoDto> villageRegisterCheck(CheckVillageDto checkVillageDto);

@@ -45,7 +45,7 @@ public class VillageController {
     //마을 정보 조회
     @GetMapping("")
     public ResVillageInfoDto villageInfoCheck(@LoginUser UserInfo userInfo){
-        return new ResVillageInfoDto(villageService.villageInfoCheck(userInfo));
+        return villageService.villageInfoCheck(userInfo);
     }
 
 

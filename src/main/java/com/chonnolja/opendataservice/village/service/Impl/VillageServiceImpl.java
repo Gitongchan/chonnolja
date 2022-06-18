@@ -191,13 +191,15 @@ public class VillageServiceImpl implements VillageService {
 
     //사업자 회사 정보 조회
     @Override
-    public VillageInfo villageInfoCheck(UserInfo userInfo) {
+    public ResVillageInfoDto villageInfoCheck(UserInfo userInfo) {
         UserInfo userInfoCheck = userRepository.findById(userInfo.getId()).orElseThrow(
                 () -> new CustomException.ResourceNotFoundException("회원 정보를 찾을 수 없습니다.")
         );
-        return villageRepository.findByUserInfo(userInfoCheck).orElseThrow(
+         VillageInfo villageInfo = villageRepository.findByUserInfo(userInfoCheck).orElseThrow(
                 () -> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다.")
         );
+
+         return new ResVillageInfoDto(villageInfo);
     }
 
     //사업자탈퇴
