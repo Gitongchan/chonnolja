@@ -80,9 +80,13 @@ public class VillageInfo {
 
     /* 매칭되어 새로 입력받는 데이터 */
 
-    //마을 계좌
+    //마을 은행명
+    @Column(name = "village_bank_name")
+    private String villageBankName;
+
+    //마을 계좌 번호
     @Column(name = "village_banknum")
-    private String villageBanknum;
+    private String villageBankNum;
 
     //마을 상태 (회원가입 신청,정지,이용중,이용전 등등)
     @Enumerated(value = EnumType.STRING)
@@ -105,14 +109,18 @@ public class VillageInfo {
     @Column(name = "village_notify")
     private String villageNotify;
 
+    //조회수
+    @Column(name = "village_view_cnt")
+    private Integer villageViewCnt;
+
     @Builder
     public VillageInfo(Long villageId, UserInfo userInfo, String villageName, String villageRepName,
                        String villageNum, String villageAdrMain, String villageAdrSub,
                        String villageStreetAdr, String villageLatitude, String villageLongitude,
                        String villageUrl, String villageProviderCode, String villageProviderName,
-                       String villageBanknum, VillageStatus villageStatus, LocalDateTime villageDeletedDate,
+                       String villageBankName,String villageBankNum, VillageStatus villageStatus, LocalDateTime villageDeletedDate,
                        String villageActivity, String villagePhoto, String villageDescription,
-                       String villageNotify) {
+                       String villageNotify,Integer villageViewCnt) {
         this.villageId = villageId;
         this.userInfo = userInfo;
         this.villageName = villageName;
@@ -126,12 +134,14 @@ public class VillageInfo {
         this.villageUrl = villageUrl;
         this.villageProviderCode = villageProviderCode;
         this.villageProviderName = villageProviderName;
-        this.villageBanknum = villageBanknum;
+        this.villageBankName = villageBankName;
+        this.villageBankNum = villageBankNum;
         this.villageStatus = villageStatus;
         this.villageDeletedDate = villageDeletedDate;
         this.villageActivity = villageActivity;
         this.villagePhoto = villagePhoto;
         this.villageDescription = villageDescription;
         this.villageNotify = villageNotify;
+        this.villageViewCnt = villageViewCnt;
     }
 }
