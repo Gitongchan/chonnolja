@@ -48,16 +48,17 @@ public class VillageServiceImpl implements VillageService {
     }
     
     //체험마을 사업자 등록 전 확인
+    //체험마을 사업자 등록 전 확인
     @Override
     public List<ResVillageInfoDto> villageRegisterCheck(CheckVillageDto checkVillageDto){
-        if(villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo(
-                checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr(),null
-            ).isEmpty()
+        if(villageRepository.findByUserNullVillageInfo(
+                checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr()
+        ).isEmpty()
         ){
             return null;
         }
-        return villageRepository.findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo
-                        (checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr(),null)
+        return villageRepository.findByUserNullVillageInfo
+                        (checkVillageDto.getVillageRepName(),checkVillageDto.getVillageNum(),checkVillageDto.getVillageStreetAdr())
                 .stream()   //stream을 통해 List를 스트림으로
                 .map(ResVillageInfoDto::new)  //map()은 원소를 가공 .map()을 이용해 원하는 객체에 다시 담아준다
                 .collect(Collectors.toList()); //Collectors.toList 로 map을 list로 변환후 리스트로 리턴

@@ -1,8 +1,8 @@
 //jquery 가져와서 사용하는 곳
-let script = document.createElement('script');
-script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
-script.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(script);
+// let script = document.createElement('script');
+// script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
+// script.type = 'text/javascript';
+// document.getElementsByTagName('head')[0].appendChild(script);
 
 // 공백 정규식
 // var regExp = /^[0-9]+$/;
@@ -34,7 +34,6 @@ const userData = {
     username: document.getElementById('reg-name'),
     email: document.getElementById('reg-email'),
     phone: document.getElementById('reg-phone'),
-    companyName: document.getElementById('reg-companyName'),
     postCode: document.getElementById('sample4_postcode'),
     sample4_roadAddress: document.getElementById('sample4_roadAddress'),
     sample4_jibunAddress: document.getElementById('sample4_jibunAddress'),
@@ -42,12 +41,7 @@ const userData = {
 }
 
 //마을 값들
-const villData = {
-    postCode: document.getElementById('sample4_postcode'),
-    sample4_roadAddress: document.getElementById('sample4_roadAddress'),
-    sample4_jibunAddress: document.getElementById('sample4_jibunAddress'),
-    sample4_detailAddress: document.getElementById('sample4_detailAddress')
-}
+const villId = document.getElementById('vill-id');
 
 <!-- 유효성검사가 정상실행 되어서 값이 입력되어있다면 실행하는 함수-->
 function userButtoncheck() {
@@ -59,15 +53,19 @@ function userButtoncheck() {
         userData.phone.classList.contains("_success") &&
         userData.sample4_detailAddress.classList.contains("_success"))
     document.querySelector('#register-pass.btn.uregister-pass').disabled = !result;
+    villButtonCheck();
 }
 
-function villButtoncheck() {
+function villButtonCheck() {
     const result = (userData.userid.classList.contains("_success") &&
         userData.password1.classList.contains("_success") &&
         userData.password2.classList.contains("_success") &&
         userData.username.classList.contains("_success") &&
-        userData.email.classList.contains("_success"))
-    document.querySelector('#register-pass.btn.vregister-pass').disabled = !result;
+        userData.email.classList.contains("_success") &&
+        userData.phone.classList.contains("_success") &&
+        villId.value.trim()!=="")
+
+        document.querySelector('#register-pass.btn.vregister-pass').disabled = !result;
 }
 
 <!-- 회원가입 아이디 및 패스워드 확인 함수-->
@@ -84,7 +82,6 @@ const regeisterCheck = {
             userData.userid.classList.remove("_success");
             userData.userid.classList.add("_error");
             userButtoncheck();
-            villButtoncheck();
         } else {
             console.log("정규식 성공이에요!!!");
             <!-- 정규식 성공 시-->
@@ -98,7 +95,6 @@ const regeisterCheck = {
                         userData.userid.classList.remove("_error");
                         userData.userid.classList.add("_success");
                         userButtoncheck();
-                        villButtoncheck();
                     } else {
                         document.getElementById('id_check').innerHTML = '사용 중인 아이디입니다!!';
                         document.getElementById('id_check').style.display = 'block';
@@ -106,7 +102,6 @@ const regeisterCheck = {
                         userData.userid.classList.remove("_success");
                         userData.userid.classList.add("_error");
                         userButtoncheck();
-                        villButtoncheck();
                     }
                 })
                 .catch(error => console.log(error))
@@ -121,14 +116,12 @@ const regeisterCheck = {
             userData.password2.classList.remove("_success");
             userData.password2.classList.add("_error");
             userButtoncheck();
-            villButtoncheck();
         } else {
             <!-- 두 비밀번호가 일치할때-->
             document.getElementById('pw_confirmcheck').style.display = "none";
             userData.password2.classList.remove("_error");
             userData.password2.classList.add("_success");
             userButtoncheck();
-            villButtoncheck();
         }
     },
     EMAIL: () => {
@@ -141,7 +134,6 @@ const regeisterCheck = {
             userData.email.classList.remove("_success");
             userData.email.classList.add("_error");
             userButtoncheck();
-            villButtoncheck();
         } else {
             <!-- 정규식 성공 시-->
             fetch(`/api/email_check?email=${userData.email.value}`)
@@ -154,7 +146,6 @@ const regeisterCheck = {
                         userData.email.classList.remove("_error");
                         userData.email.classList.add("_success");
                         userButtoncheck();
-                        villButtoncheck();
                     } else {
                         document.getElementById('em_check').innerHTML = '사용 중인 이메일입니다!!';
                         document.getElementById('em_check').style.display = 'block';
@@ -162,7 +153,6 @@ const regeisterCheck = {
                         userData.email.classList.remove("_success");
                         userData.email.classList.add("_error");
                         userButtoncheck();
-                        villButtoncheck();
                     }
                 })
                 .catch(error => console.log(error))
@@ -181,7 +171,6 @@ userData.password1.onblur = function () {
         userData.password1.classList.remove('_success');
         userData.password1.classList.add('_error');
         userButtoncheck();
-        villButtoncheck();
     } else {
         <!-- 비밀번호 정규화 성공시-->
         document.getElementById("pw_check").style.display = "none";
@@ -189,7 +178,6 @@ userData.password1.onblur = function () {
         userData.password1.classList.add('_success');
         regeisterCheck.PW();
         userButtoncheck();
-        villButtoncheck();
     }
 };
 
@@ -201,14 +189,12 @@ userData.username.onblur = function () {
         userData.username.classList.remove("_success");
         userData.username.classList.add("_error");
         userButtoncheck();
-        villButtoncheck();
     } else {
         <!-- 성공 시 -->
         document.getElementById("name_check").style.display = 'none';
         userData.username.classList.remove("_error");
         userData.username.classList.add("_success");
         userButtoncheck();
-        villButtoncheck();
     }
 };
 
@@ -220,13 +206,11 @@ userData.phone.onblur = function () {
         userData.phone.classList.remove("_success");
         userData.phone.classList.add("_error");
         userButtoncheck();
-        villButtoncheck();
     } else {
         document.getElementById("phone_check").style.display = 'none';
         userData.phone.classList.remove("_error");
         userData.phone.classList.add("_success");
         userButtoncheck();
-        villButtoncheck();
     }
 };
 
@@ -237,13 +221,11 @@ userData.sample4_detailAddress.onblur = function () {
         userData.sample4_detailAddress.classList.remove("_error");
         userData.sample4_detailAddress.classList.add("_success");
         userButtoncheck();
-        villButtoncheck();
     } else {
         //실패
         userData.sample4_detailAddress.classList.remove("_success");
         userData.sample4_detailAddress.classList.add("_error");
         userButtoncheck();
-        villButtoncheck();
     }
 };
 
@@ -263,6 +245,7 @@ const vRegisterBtn = document.querySelector('#register-pass.btn.vregister-pass')
 //일반회원 탭을 눌렀을 때
 const userTap = document.getElementById('tap-member');
 userTap.addEventListener('click',()=>{
+    document.getElementById('vill-check').style.display='none';
     uRegisterBtn.style.display = 'block';
     vRegisterBtn.style.display = "none";
     ctap_css.classList.remove('_select');
@@ -299,14 +282,9 @@ const companyBtn = function() {
         password: userData.password1.value,
         name: userData.username.value,
         phone: userData.phone.value,
-        email: userData.email.value,
-        companyName: userData.companyName.value,
-        companyAdrNum: userData.postCode.value,
-        companyLotAdr: userData.sample4_jibunAddress.value,
-        companyStreetAdr: userData.sample4_roadAddress.value,
-        companyDetailAdr: userData.sample4_detailAddress.value
+        email: userData.email.value
     }
-    fetch("/api/company/signup", {
+    fetch(`/api/village/signup/${villId.value}`, {
         method: "POST",
         headers: {
             'header': header,
@@ -318,7 +296,7 @@ const companyBtn = function() {
     })
         .then(res => {
             if (res.status === 200 || res.status === 201) { // 성공을 알리는 HTTP 상태 코드면
-
+                alert('사업자 회원가입 성공')
             } else { // 실패를 알리는 HTTP 상태 코드면
                 console.error(res.statusText);
                 console.error(res);
@@ -358,7 +336,7 @@ uRegisterBtn.addEventListener('click',  function () {
     })
         .then(res => {
             if (res.status === 200 || res.status === 201) { // 성공을 알리는 HTTP 상태 코드면
-
+                alert('유저 회원가입 성공')
             } else { // 실패를 알리는 HTTP 상태 코드면
                 console.error(res.statusText);
                 console.error(res);

@@ -177,22 +177,35 @@
                                                placeholder="대표 연락처를 입력해주세요" required/>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="reg-street-adr">마을 도로명 주소</label>
-                                    <input class="form-control" name="villageStreet" type="text" id="reg-street-adr"
-                                           placeholder="마을 도로명 주소를 입력해주세요." required/>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <label for="reg-street-adr">마을 도로명 주소</label>
+                                        <input class="form-control" name="villageStreet" type="text" id="reg-street-adr"
+                                               placeholder="마을 도로명 주소를 입력해주세요." required/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="button">
+                                            <button class="btn" id="vill-road-search">주소검색</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="button">
-                                        <button class="btn">검색하기</button>
+                                        <button class="btn" id="vill-search" disabled="true">마을 검색하기</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    <input type="hidden" id="vill-id"/>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <span class="vill-check" id="vill-check">마을정보가 확인되었습니다!</span>
+                        </div>
+                    </div>
                         <div class="button">
                             <button class="btn uregister-pass" id="register-pass" disabled="true">회원가입</button>
                             <button class="btn vregister-pass" id="register-pass" disabled="true">회원가입</button>
@@ -210,4 +223,5 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/addressFind.js"></script>
 <script src="/js/user/userRegister.js"></script>
+<script src="/js/user/villageCheck.js"></script>
 {{>pages/footer2}}

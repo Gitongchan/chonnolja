@@ -7,11 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
     @GetMapping("/")
     public String index(){
-        return "testindex";
-    }
-    @GetMapping("/joinPage")
-    public String join(){
-        return "join";
+        return "pages/index";
     }
     @GetMapping("/index")
     public String testindex(){
@@ -19,8 +15,34 @@ public class PageController {
     }
 
     @GetMapping("/register")
-    public String testval(){
+    public String register(){
         return "pages/register";
+    }
+
+    @GetMapping("/pages/login")
+    public String login(){
+        return "pages/login";
+    }
+
+    @GetMapping("/villageCheck")
+    public String villCheck(){
+        return "pages/villageCheck";
+    }
+
+    @GetMapping("/villageinfo")
+    public String villinfo(){
+        return "pages/product-details";
+    }
+
+
+    @GetMapping("/villagelist")
+    public String villlist(){
+        return "pages/product-grids";
+    }
+
+    @GetMapping("/mapsearch")
+    public String searchMap(){
+        return "pages/mapSearch";
     }
 
     @GetMapping("/test/mainfunc")
