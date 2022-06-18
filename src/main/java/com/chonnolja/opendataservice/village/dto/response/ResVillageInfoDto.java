@@ -1,4 +1,4 @@
-package com.chonnolja.opendataservice.village.dto.reponse;
+package com.chonnolja.opendataservice.village.dto.response;
 
 
 import com.chonnolja.opendataservice.user.model.UserInfo;
@@ -55,8 +55,11 @@ public class ResVillageInfoDto {
     //제공기관명
     private String villageProviderName;
 
+    //마을 은행명
+    private String villageBankName;
+
     //마을 계좌
-    private String villageBanknum;
+    private String villageBankNum;
 
     //마을 사업자 사용가능 여부
     private VillageStatus villageStatus;
@@ -75,6 +78,11 @@ public class ResVillageInfoDto {
 
     //체험마을안내사항
     private String villageNotify;
+    
+    //체험마을 조회수
+    private Integer villageViewCnt;
+
+
 
     public ResVillageInfoDto(VillageInfo villageInfo) {
         this.userInfo = villageInfo.getUserInfo();
@@ -90,12 +98,14 @@ public class ResVillageInfoDto {
         this.villageUrl = villageInfo.getVillageUrl();
         this.villageProviderCode = villageInfo.getVillageProviderCode();
         this.villageProviderName = villageInfo.getVillageProviderName();
-        this.villageBanknum = villageInfo.getVillageBanknum();
+        this.villageBankName = villageInfo.getVillageBankName();
+        this.villageBankNum = villageInfo.getVillageBankNum();
         this.villageStatus = villageInfo.getVillageStatus();
         this.villageDeletedDate = villageInfo.getVillageDeletedDate();
         this.villageActivity = villageInfo.getVillageActivity();
         this.villagePhoto = villageInfo.getVillagePhoto();
         this.villageDescription = villageInfo.getVillageDescription();
         this.villageNotify = villageInfo.getVillageNotify();
+        this.villageViewCnt = villageInfo.getVillageViewCnt();
     }
 }

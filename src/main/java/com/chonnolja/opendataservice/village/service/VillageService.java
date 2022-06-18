@@ -2,12 +2,16 @@ package com.chonnolja.opendataservice.village.service;
 
 
 import com.chonnolja.opendataservice.user.model.UserInfo;
-import com.chonnolja.opendataservice.village.dto.reponse.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.CheckVillageDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageUserInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoListDto;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
+import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface VillageService {
@@ -29,6 +33,11 @@ public interface VillageService {
     //체험마을 사업자 등록 전 확인
     List<ResVillageInfoDto> villageRegisterCheck(CheckVillageDto checkVillageDto);
 
+    //체험마을 리스트
+    List<ResVillageInfoListDto> villageList(Pageable pageable,int page,String villageActivity,String villageName,String address,
+                                            String sort,int size);
+
+    ResVillageInfoDto villageInfo(Long villageId, HttpServletRequest request, HttpServletResponse response);
 
 
 }

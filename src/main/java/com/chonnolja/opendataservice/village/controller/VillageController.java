@@ -4,7 +4,7 @@ package com.chonnolja.opendataservice.village.controller;
 import com.chonnolja.opendataservice.annotation.LoginUser;
 import com.chonnolja.opendataservice.user.model.UserInfo;
 import com.chonnolja.opendataservice.util.responseDto.ResResultDto;
-import com.chonnolja.opendataservice.village.dto.reponse.ResVillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
 import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class VillageController {
     
 
 
-    //사업자 탈퇴
+    //마을 탈퇴
     @PutMapping("/deleted")
     public ResResultDto villageDeleted(@LoginUser UserInfo userInfo){
 
@@ -29,7 +29,7 @@ public class VillageController {
                 new ResResultDto(result,"사업자 탈퇴 실패.") : new ResResultDto(result,"사업자 탈퇴 성공.");
     }
     
-    //사업자 정보 수정
+    //마을 정보 수정
     @PutMapping("/update")
     public ResResultDto villageUpdate(@LoginUser UserInfo userInfo,@RequestBody VillageInfoDto villageInfoDto){
         Long result = villageService.villageUpdate(userInfo, villageInfoDto);
@@ -37,7 +37,7 @@ public class VillageController {
                 new ResResultDto(result,"회사정보 수정 실패.") : new ResResultDto(result,"회사정보 수정 성공.");
     }
     
-    //사업자 회사 정보 조회
+    //마을 정보 조회
     @GetMapping("")
     public ResVillageInfoDto villageInfoCheck(@LoginUser UserInfo userInfo){
         return new ResVillageInfoDto(villageService.villageInfoCheck(userInfo));
