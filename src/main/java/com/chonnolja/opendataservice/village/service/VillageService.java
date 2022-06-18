@@ -26,7 +26,7 @@ public interface VillageService {
     Long villageRegister(Long villageRegisterId, VillageUserInfoDto villageUserInfoDto, MultipartFile thumb);
 
     //사업자 회사 정보 수정
-    Long villageUpdate(UserInfo userInfo, VillageInfoDto villageInfoDto);
+    Long villageUpdate(UserInfo userInfo,Long villageId ,VillageInfoDto villageInfoDto,String deletedThumb,MultipartFile thumb);
 
     //사업자 회사 정보 조회
     VillageInfo villageInfoCheck(UserInfo userInfo);
@@ -39,6 +39,8 @@ public interface VillageService {
                                             String sort,int size);
 
     ResVillageInfoDto villageInfo(Long villageId, HttpServletRequest request, HttpServletResponse response);
+
+
 
 
 }

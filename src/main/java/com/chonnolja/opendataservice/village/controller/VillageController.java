@@ -4,12 +4,13 @@ package com.chonnolja.opendataservice.village.controller;
 import com.chonnolja.opendataservice.annotation.LoginUser;
 import com.chonnolja.opendataservice.user.model.UserInfo;
 import com.chonnolja.opendataservice.util.responseDto.ResResultDto;
-import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.request.VillageInfoDto;
+import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,9 +31,13 @@ public class VillageController {
     }
     
     //마을 정보 수정
-    @PutMapping("/update")
-    public ResResultDto villageUpdate(@LoginUser UserInfo userInfo,@RequestBody VillageInfoDto villageInfoDto){
-        Long result = villageService.villageUpdate(userInfo, villageInfoDto);
+    @PutMapping("/update/{item}")
+    public ResResultDto villageUpdate(@LoginUser UserInfo userInfo,
+                                      @PathVariable("item") Long productId,
+                                      @RequestPart(value = "villageInfoDto") VillageInfoDto villageInfoDto,
+                                      @RequestPart(value = "deletedThumb",required=false) String deletedThumb,
+                                      @RequestPart(value = "thumbFile",required=false) MultipartFile thumb){
+        Long result = villageService.villageUpdate(userInfo,productId,villageInfoDto,deletedThumb,thumb);
         return result == -1L ?
                 new ResResultDto(result,"회사정보 수정 실패.") : new ResResultDto(result,"회사정보 수정 성공.");
     }

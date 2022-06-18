@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,8 @@ public class VillageServiceImpl implements VillageService {
                                     .villageProviderCode(registerVillInfo.getVillageProviderCode())
                                     .villageProviderName(registerVillInfo.getVillageProviderName())
                                     .villageUrl(registerVillInfo.getVillageUrl())
-                                    .villageBankNum(villageUserInfoDto.getVillageBanknum())
+                                    .villageBankName(villageUserInfoDto.getVillageBankName())
+                                    .villageBankNum(villageUserInfoDto.getVillageBankNum())
                                     .villageStatus(VillageStatus.USE)//가입시 자동 설정
                                     .villagePhoto(thumbFilePath)
                                     .villageDescription(villageUserInfoDto.getVillageDescription())
@@ -134,12 +136,30 @@ public class VillageServiceImpl implements VillageService {
 
     //사업자 정보 수정
     @Override
-    public Long villageUpdate(UserInfo userInfo, VillageInfoDto villageInfoDto) {
-        if(villageRepository.findByUserInfo(userInfo).isPresent()){
-
-            VillageInfo updateVillageInfo = villageRepository.findByUserInfo(userInfo).orElseGet(
-                    ()-> VillageInfo.builder().build()
+    public Long villageUpdate(UserInfo userInfo,Long villageId,VillageInfoDto villageInfoDto,String deletedThumb,MultipartFile thumb) {
+            UserInfo updateUserInfo = userRepository.findById(userInfo.getId()).orElseThrow(
+                    () -> new CustomException.ResourceNotFoundException("회원 정보를 찾을 수 없습니다.")
             );
+
+            VillageInfo updateVillageInfo = villageRepository.findByUserInfo(updateUserInfo).orElseThrow(
+                    ()-> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다.")
+            );
+
+            //썸네일이 삭제되었을때
+            if(deletedThumb != null && thumb != null){
+                File deletedThumbFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\village_thumbNail\\" + deletedThumb);
+                if(deletedThumbFile.delete()){
+                    String updateThumb = villageFileService.thumbFile(thumb);
+                    villageRepository.updateVillagePhoto(updateThumb,villageId);
+                }
+            }
+             String thumbFilePath = null;
+
+            //썸네일 저장
+            if(!thumb.isEmpty()){
+                thumbFilePath = villageFileService.thumbFile(thumb);
+            }
+
             // 그외의 정보들은 문의를 통해서만 변경 가능하다
             villageRepository.save(
                     VillageInfo.builder()
@@ -157,26 +177,27 @@ public class VillageServiceImpl implements VillageService {
                             .villageProviderCode(updateVillageInfo.getVillageProviderCode())
                             .villageProviderName(updateVillageInfo.getVillageProviderName())
                             .villageUrl(villageInfoDto.getVillageUrl())
-                            .villageBankNum(villageInfoDto.getVillageBanknum())
-                            .villageBankName(villageInfoDto.getVillageName())
+                            .villageBankNum(villageInfoDto.getVillageBankNum())
+                            .villageBankName(villageInfoDto.getVillageBankName())
                             .villageStatus(updateVillageInfo.getVillageStatus())
-                            .villagePhoto(villageInfoDto.getVillagePhoto())
+                            .villagePhoto(thumbFilePath)
                             .villageDescription(villageInfoDto.getVillageDescription())
                             .villageNotify(villageInfoDto.getVillageNotify())
                             .build()
             );
             return updateVillageInfo.getVillageId();
         }
-        else return -1L;
-    }
+
 
     //사업자 회사 정보 조회
     @Override
     public VillageInfo villageInfoCheck(UserInfo userInfo) {
-        if(villageRepository.findByUserInfo(userInfo).isPresent()){
-            return villageRepository.findByUserInfo(userInfo).get();
-        }
-        return null;
+        UserInfo userInfoCheck = userRepository.findById(userInfo.getId()).orElseThrow(
+                () -> new CustomException.ResourceNotFoundException("회원 정보를 찾을 수 없습니다.")
+        );
+        return villageRepository.findByUserInfo(userInfoCheck).orElseThrow(
+                () -> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다.")
+        );
     }
 
     //사업자탈퇴

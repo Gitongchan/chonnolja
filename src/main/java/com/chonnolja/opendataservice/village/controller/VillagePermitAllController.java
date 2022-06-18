@@ -11,6 +11,7 @@ import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +48,7 @@ public class VillagePermitAllController {
     }
 
     //마을 회원가입
-    @PostMapping("/signup/{villageId}")
+    @PostMapping(value = "/signup/{villageId}",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResResultDto villageRegister(@PathVariable("villageId") Long villageId,
                                         @RequestPart(value = "villageUserInfoDto") VillageUserInfoDto villageUserInfoDto,
                                         @RequestPart(value = "thumbFile",required=false) MultipartFile thumb) {

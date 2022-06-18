@@ -221,8 +221,8 @@ public class UserServiceImpl implements UserService {
                             .villageProviderCode(registerVillInfo.getVillageProviderCode())
                             .villageProviderName(registerVillInfo.getVillageProviderName())
                             .villageUrl(registerVillInfo.getVillageUrl())
-                            .villageBankName(villageInfoDto.getVillageName())
-                            .villageBankNum(villageInfoDto.getVillageBanknum())
+                            .villageBankName(villageInfoDto.getVillageBankName())
+                            .villageBankNum(villageInfoDto.getVillageBankNum())
                             .villageStatus(VillageStatus.USE)//가입시 자동 설정
                             .villagePhoto(villageInfoDto.getVillagePhoto())
                             .villageDescription(villageInfoDto.getVillageDescription())
