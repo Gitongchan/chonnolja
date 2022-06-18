@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +49,8 @@ public class VillagePermitAllController {
     //마을 회원가입
     @PostMapping("/signup/{villageId}")
     public ResResultDto villageRegister(@PathVariable("villageId") Long villageId,
-                                        @RequestBody VillageUserInfoDto villageUserInfoDto) {
+                                        @RequestPart(value = "villageUserInfoDto") VillageUserInfoDto villageUserInfoDto,
+                                        @RequestPart(value = "thumbFile",required=false) MultipartFile thumb) {
 
         Integer idCheckResult = userService.userIdCheck(villageUserInfoDto.getUserid());
         Integer emailCheckResult = userService.emailCheck(villageUserInfoDto.getEmail());
@@ -57,7 +59,7 @@ public class VillagePermitAllController {
         if (idCheckResult.equals(-1) || emailCheckResult.equals(-1)) {
             return new ResResultDto(-1L, "회원가입 실패, 아이디,이메일을 다시 확인하세요.");
         } else {
-            Long result = villageService.villageRegister(villageId, villageUserInfoDto);
+            Long result = villageService.villageRegister(villageId, villageUserInfoDto,thumb);
             return result > 0 ?
                     new ResResultDto(result, "사업자 등록 성공.") : new ResResultDto(result, "사업자 등록 실패.");
         }

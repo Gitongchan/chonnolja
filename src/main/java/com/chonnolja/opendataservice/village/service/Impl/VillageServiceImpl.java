@@ -12,6 +12,7 @@ import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoDto;
 import com.chonnolja.opendataservice.village.dto.response.ResVillageInfoListDto;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import com.chonnolja.opendataservice.village.repository.VillageRepository;
+import com.chonnolja.opendataservice.village.service.VillageFileService;
 import com.chonnolja.opendataservice.village.service.VillageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 public class VillageServiceImpl implements VillageService {
      private final VillageRepository villageRepository;
      private final UserRepository userRepository;
+     private final VillageFileService villageFileService;
 
 
     //업체명 중복 체크
@@ -67,7 +70,7 @@ public class VillageServiceImpl implements VillageService {
 
     //사업자 회원 등록
     @Override
-    public Long villageRegister(Long villageRegisterId,VillageUserInfoDto villageUserInfoDto) {
+    public Long villageRegister(Long villageRegisterId, VillageUserInfoDto villageUserInfoDto, MultipartFile thumb) {
 
         //비밀번호 암호화
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -77,6 +80,12 @@ public class VillageServiceImpl implements VillageService {
         VillageInfo registerVillInfo = villageRepository.findByVillageId(villageRegisterId).orElseThrow(
                 () -> new CustomException.ResourceNotFoundException("마을 정보를 찾을 수 없습니다.")
         );
+
+        String thumbFilePath = null;
+        //썸네일 저장
+        if(!thumb.isEmpty()){
+            thumbFilePath = villageFileService.thumbFile(thumb);
+        }
 
         //저장 로직
             UserInfo singUpUserInfo =
@@ -113,7 +122,7 @@ public class VillageServiceImpl implements VillageService {
                                     .villageUrl(registerVillInfo.getVillageUrl())
                                     .villageBankNum(villageUserInfoDto.getVillageBanknum())
                                     .villageStatus(VillageStatus.USE)//가입시 자동 설정
-                                    .villagePhoto(villageUserInfoDto.getVillagePhoto())
+                                    .villagePhoto(thumbFilePath)
                                     .villageDescription(villageUserInfoDto.getVillageDescription())
                                     .villageNotify(villageUserInfoDto.getVillageNotify())
                                     .build()
