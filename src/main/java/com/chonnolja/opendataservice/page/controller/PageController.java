@@ -13,12 +13,12 @@ public class PageController {
     public String join(){
         return "join";
     }
-    @GetMapping("/test/index")
+    @GetMapping("/index")
     public String testindex(){
         return "pages/index";
     }
 
-    @GetMapping("/test/val")
+    @GetMapping("/register")
     public String testval(){
         return "pages/register";
     }
