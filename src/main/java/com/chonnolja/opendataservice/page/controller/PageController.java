@@ -19,6 +19,11 @@ public class PageController {
         return "pages/register";
     }
 
+    @GetMapping("/pages/login")
+    public String login(){
+        return "pages/login";
+    }
+
     @GetMapping("/villageCheck")
     public String villCheck(){
         return "pages/villageCheck";
