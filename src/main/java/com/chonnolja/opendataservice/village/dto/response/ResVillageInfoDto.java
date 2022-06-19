@@ -1,7 +1,6 @@
 package com.chonnolja.opendataservice.village.dto.response;
 
 
-import com.chonnolja.opendataservice.user.model.UserInfo;
 import com.chonnolja.opendataservice.village.dto.request.VillageStatus;
 import com.chonnolja.opendataservice.village.model.VillageInfo;
 import lombok.AllArgsConstructor;
@@ -16,9 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ResVillageInfoDto {
-    //userinfo
-    private UserInfo userInfo;
-
     //사업자등록번호
     private Long villageId;
 
@@ -85,7 +81,6 @@ public class ResVillageInfoDto {
 
 
     public ResVillageInfoDto(VillageInfo villageInfo) {
-        this.userInfo = villageInfo.getUserInfo();
         this.villageId = villageInfo.getVillageId();
         this.villageName = villageInfo.getVillageName();
         this.villageRepName = villageInfo.getVillageRepName();

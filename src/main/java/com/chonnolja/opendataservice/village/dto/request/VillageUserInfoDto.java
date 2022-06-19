@@ -103,8 +103,11 @@ public class VillageUserInfoDto {
     //제공기관명
     private String villageProviderName;
 
+    //마을 은행명
+    private String villageBankName;
+
     //마을 계좌
-    private String villageBanknum;
+    private String villageBankNum;
 
     //마을 상태
     private VillageStatus villageStatus;

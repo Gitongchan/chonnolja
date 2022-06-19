@@ -42,4 +42,11 @@ public interface VillageRepository extends JpaRepository<VillageInfo,Integer> {
     @Modifying
     @Query("update VillageInfo v set v.villageViewCnt = v.villageViewCnt + 1 where v.villageId =:villageId")
     void updateVillageView(@Param("villageId") Long villageId);
+    
+    //대표이미지 수정
+    @Transactional
+    @Modifying
+    @Query("UPDATE VillageInfo v set v.villagePhoto = :villagePhoto where v.villageId = :villageId")
+    void updateVillagePhoto(@Param("villagePhoto") String villagePhoto,@Param("villageId") Long villageId);
+
 }
