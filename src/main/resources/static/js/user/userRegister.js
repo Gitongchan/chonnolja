@@ -42,6 +42,7 @@ const userData = {
 
 //마을 값들
 const villId = document.getElementById('vill-id');
+const villimg = document.getElementById('thumb-file');
 
 <!-- 유효성검사가 정상실행 되어서 값이 입력되어있다면 실행하는 함수-->
 function userButtoncheck() {
@@ -63,7 +64,8 @@ function villButtonCheck() {
         userData.username.classList.contains("_success") &&
         userData.email.classList.contains("_success") &&
         userData.phone.classList.contains("_success") &&
-        villId.value.trim()!=="")
+        villId.value.trim()!=="" &&
+        villimg.value !== "")
 
         document.querySelector('#register-pass.btn.vregister-pass').disabled = !result;
 }
@@ -277,6 +279,9 @@ const companyBtn = function() {
     const header = document.querySelector('meta[name="_csrf_header"]').content;
     const token = document.querySelector('meta[name="_csrf"]').content;
 
+    //폼 생성
+    const formData = new FormData();
+
     const postData = {
         userid: userData.userid.value,
         password: userData.password1.value,
@@ -284,15 +289,18 @@ const companyBtn = function() {
         phone: userData.phone.value,
         email: userData.email.value
     }
+
+    formData.append("thumbFile", villimg.files[0]);
+    formData.append("villageUserInfoDto",
+        new Blob([JSON.stringify(postData)], {type:"application/json"}))
+
     fetch(`/api/village/signup/${villId.value}`, {
         method: "POST",
         headers: {
             'header': header,
-            'X-Requested-With': 'XMLHttpRequest',
-            "Content-Type": "application/json",
             'X-CSRF-Token': token
         },
-        body: JSON.stringify(postData)
+        body: formData
     })
         .then(res => {
             if (res.status === 200 || res.status === 201) { // 성공을 알리는 HTTP 상태 코드면

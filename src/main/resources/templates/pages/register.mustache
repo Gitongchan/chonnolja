@@ -1,6 +1,8 @@
 {{>pages/header1}}
 
 <link rel="stylesheet" href="/css/validation.css"/>
+<link rel="stylesheet" href="/css/board.css"/>
+
 {{>pages/header2}}
 <!-- Start Breadcrumbs -->
 <div class="breadcrumbs">
@@ -187,7 +189,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="button">
-                                            <button class="btn" id="vill-road-search">주소검색</button>
+                                            <button class="btn" id="vill-search" disabled="true">마을 검색</button>
                                         </div>
                                     </div>
                                 </div>
@@ -195,17 +197,20 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="button">
-                                        <button class="btn" id="vill-search" disabled="true">마을 검색하기</button>
+                                        <button class="btn" id="vill-thumb">대표이미지 설정</button>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <span class="vill-check" id="vill-check">마을정보가 확인되었습니다!</span>
+                                </div>
+                            </div>
+                            <input type="file" id="thumb-file"/>
+                            <div id="thumb-preview" class="detail-inner">
+                            </div>
                         </div>
                     <input type="hidden" id="vill-id"/>
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <span class="vill-check" id="vill-check">마을정보가 확인되었습니다!</span>
-                        </div>
-                    </div>
                         <div class="button">
                             <button class="btn uregister-pass" id="register-pass" disabled="true">회원가입</button>
                             <button class="btn vregister-pass" id="register-pass" disabled="true">회원가입</button>
@@ -224,4 +229,6 @@
 <script src="/js/addressFind.js"></script>
 <script src="/js/user/userRegister.js"></script>
 <script src="/js/user/villageCheck.js"></script>
+<script src="/js/user/addThumbnale.js"></script>
+
 {{>pages/footer2}}

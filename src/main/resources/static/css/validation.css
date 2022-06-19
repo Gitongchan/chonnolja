@@ -85,6 +85,9 @@
     display: none;
 }
 
+#thumb-file{
+    display: none;
+}
 /*
     Screen Size
     xs <576px
@@ -126,7 +129,7 @@
     #PostCode{
         margin-top:18px;
     }
-    #vill-road-search{
+    #vill-search{
         margin-top:18px;
     }
 }

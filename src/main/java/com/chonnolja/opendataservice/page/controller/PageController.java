@@ -29,11 +29,15 @@ public class PageController {
         return "pages/villageCheck";
     }
 
+    @GetMapping("/villageThumbCheck")
+    public String villageThumbCheck(){
+        return "pages/villageThumbCheck";
+    }
+
     @GetMapping("/villageinfo")
     public String villinfo(){
         return "pages/product-details";
     }
-
 
     @GetMapping("/villagelist")
     public String villlist(){
@@ -44,6 +48,28 @@ public class PageController {
     public String searchMap(){
         return "pages/mapSearch";
     }
+
+    @GetMapping("/board")
+    public String board(){
+        return "pages/boardlist";
+    }
+
+    @GetMapping("/board/post")
+    public String boardpost(){
+        return "pages/boardPost";
+    }
+
+    @GetMapping("/board/edit")
+    public String boardedit(){
+        return "pages/boardEdit";
+    }
+
+    @GetMapping("/board/info")
+    public String boardinfo(){
+        return "pages/boardInfo";
+    }
+
+
 
     @GetMapping("/test/mainfunc")
     public String testmain(){

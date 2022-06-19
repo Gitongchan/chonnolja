@@ -63,7 +63,10 @@
                         </td>
                     </tr>
                     `
-                    document.getElementById('select').addEventListener('click',(e)=>{
+                }
+                const btn = document.querySelectorAll('#select')
+                for(const button of btn){
+                    button.addEventListener('click',(e)=>{
                         if(confirm("본인 정보가 맞으십니까?")) {
                             console.log(e);
                             opener.document.getElementById("vill-check").style.display = "block";
@@ -86,7 +89,8 @@
                 opener.document.getElementById('reg-pass-confirm').classList.contains("_success") &&
                 opener.document.getElementById('reg-name').classList.contains("_success") &&
                 opener.document.getElementById('reg-email').classList.contains("_success")&&
-                opener.document.getElementById('reg-phone').classList.contains("_success"))
+                opener.document.getElementById('reg-phone').classList.contains("_success")&&
+                opener.document.getElementById('thumb-file').value!=="")
         opener.document.querySelector('#register-pass.btn.vregister-pass').disabled = !result;
     }
 </script>
