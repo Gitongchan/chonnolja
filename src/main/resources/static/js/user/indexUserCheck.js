@@ -77,7 +77,7 @@ const checkVill = document.getElementById('checkVillage');
     catch (e) {
         console.log("에러발생!");
         span_id.innerText = `로그인이 필요합니다!`;
-        left_a.href = '/login';
+        left_a.href = '/pages/login';
         left_span.innerText = '로그인';
         left_a.appendChild(left_span);
 

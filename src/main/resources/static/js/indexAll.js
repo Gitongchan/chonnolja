@@ -18,7 +18,7 @@ const view = document.getElementById("view");
                         <div class="product-info">
                             <span class="category">${data[i].villageAdrMain}</span>
                             <h4 class="title">
-                                <a href=villageinfo?vid${data[i].villageId}>${data[i].villageName}</a>
+                                <a href=villageinfo?vid=${data[i].villageId}>${data[i].villageName}</a>
                             </h4>
                             <ul class="review">
                                 <li><i class="lni lni-star-filled"></i></li>
