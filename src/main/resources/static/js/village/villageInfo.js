@@ -12,7 +12,9 @@ const name = document.getElementById('name');
 const info = document.querySelector('.info-text');
 const phone = document.querySelector('.phone');
 const selectAct = document.getElementById('act-select');
-const selectval = document.getElementById('selectVal');
+const mainImg = document.getElementById('vill-main-img');
+const villDesc = document.getElementById('desc');
+const villNoti = document.getElementById('notify');
 
 
 (async ()=>{
@@ -25,6 +27,13 @@ const selectval = document.getElementById('selectVal');
         name.innerText = data.villageRepName;
         phone.innerText = "대표번호: " + data.villageNum;
         info.innerText = "주소 : " + data.villageStreetAdr;
+        mainImg.innerHTML+=
+            `
+                <img src=${data.villagePhoto!==null? data.villagePhoto:"https://via.placeholder.com/1000x670"} id="current" alt="#">
+            `
+        villDesc.innerText = data.villageDescription;
+        villNoti.innerText = data.villageNotify;
+
         try{
             const actRes = await fetch(`/api/activity/list/${villID}`);
 
