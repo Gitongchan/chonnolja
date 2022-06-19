@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마을 정보 확인</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/LineIcons.3.0.css" />
+    <link rel="stylesheet" href="/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/css/glightbox.min.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/villcheck.css" />
+</head>
+<body>
+<h3 class="text-center">검색결과</h3>
+<div class="container">
+    <div class="row">
+        <table class="table table-hover table-striped text-center">
+            <thead>
+            <tr>
+                <th>마을아이디</th>
+                <th>기관코드</th>
+                <th>주소</th>
+                <th>대표 번호</th>
+                <th>체험마을명</th>
+                <th>대표자명</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="info-wrap">
+            </tbody>
+        </table>
+        <div class="col-sm-12" id="info-wrap">
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    const name = opener.document.getElementById('reg-villageName').value;
+    const num = opener.document.getElementById('reg-villageNum').value;
+    const street = opener.document.getElementById('reg-street-adr').value;
+    const dv = document.getElementById('0');
+    const wrap = document.getElementById('info-wrap');
+
+
+    (async ()=>{
+        const res = await fetch(`/api/village/check?villageRepName=${name}&villageNum=${num}&villageStreetAdr=${street}`)
+
+        try{
+            const data = await res.json();
+            if(res.ok){
+                for(let i in data){
+                    console.log(data[i]);
+                    wrap.innerHTML+=`
+                    <tr>
+                        <td>${data[i].villageId}</td>
+                        <td>${data[i].villageProviderCode}</td>
+                        <td>${data[i].villageStreetAdr}</td>
+                        <td>${data[i].villageNum}</td>
+                        <td>${data[i].villageName}</td>
+                        <td>${data[i].villageRepName}</td>
+                        <td class="button" id=${data[i].villageId}>
+                            <button class="btn" id="select">선택하기</button>
+                        </td>
+                    </tr>
+                    `
+                }
+                const btn = document.querySelectorAll('#select')
+                for(const button of btn){
+                    button.addEventListener('click',(e)=>{
+                        if(confirm("본인 정보가 맞으십니까?")) {
+                            console.log(e);
+                            opener.document.getElementById("vill-check").style.display = "block";
+                            opener.document.getElementById("vill-check").style.color = "#2fb423";
+                            opener.document.getElementById("vill-id").value = e.target.parentElement.id;
+                            vButtonCheck();
+                            window.close();
+                        }
+                    })
+                }
+            }
+        }catch (e) {
+            wrap.innerHTML=`<tr><td colspan="7">일치하는 값 없음</td></tr>`;
+        }
+    })();
+
+    function vButtonCheck() {
+        const result = (opener.document.getElementById('reg-ID').classList.contains("_success") &&
+                opener.document.getElementById('reg-pass').classList.contains("_success") &&
+                opener.document.getElementById('reg-pass-confirm').classList.contains("_success") &&
+                opener.document.getElementById('reg-name').classList.contains("_success") &&
+                opener.document.getElementById('reg-email').classList.contains("_success")&&
+                opener.document.getElementById('reg-phone').classList.contains("_success")&&
+                opener.document.getElementById('thumb-file').value!=="")
+        opener.document.querySelector('#register-pass.btn.vregister-pass').disabled = !result;
+    }
+</script>
+
+</html>
+
+<!--[-->
+<!--{"userInfo":null,-->
+<!--"villageId":1,-->
+<!--"villageName":"연산면 황산벌둥지",-->
+<!--"villageRepName":"이기복",-->
+<!--"villageNum":"041-735-0700",-->
+<!--"villageAdrMain":"충청남도",-->
+<!--"villageAdrSub":"논산시",-->
+<!--"villageStreetAdr":"충청남도 논산시 연산면 신양길 167-10",-->
+<!--"villageLatitude":"36.19306606",-->
+<!--"villageLongitude":"127.2284323",-->
+<!--"villageUrl":"https://hsb.modoo.at/",-->
+<!--"villageProviderCode":"4540000",-->
+<!--"villageProviderName":"충청남도 논산시",-->
+<!--"villageBankName":null,-->
+<!--"villageBankNum":null,-->
+<!--"villageStatus":null,-->
+<!--"villageDeletedDate":null,-->
+<!--"villageActivity":"전통문화체험",-->
+<!--"villagePhoto":null,-->
+<!--"villageDescription":null,-->
+<!--"villageNotify":null,-->
+<!--"villageViewCnt":null}-->
+<!--]-->

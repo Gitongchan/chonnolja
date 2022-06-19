@@ -94,3 +94,27 @@
     gap: 20px;
     overflow: scroll;
 }
+
+.current-img{
+    position: relative;
+    width:130px;
+    height:130px;
+    margin-right: 15px;
+    box-shadow : 5px 5px 10px -5px;
+}
+
+.img-btn-delete{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    position: absolute;
+    top:-4px;
+    right: -4px;
+    border-style: none;
+    color:white;
+    box-shadow : 5px 5px 10px -5px;
+}
+
+#save-Thumb{
+    text-align: center;
+}

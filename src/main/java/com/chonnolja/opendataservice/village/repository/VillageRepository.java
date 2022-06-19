@@ -26,8 +26,13 @@ public interface VillageRepository extends JpaRepository<VillageInfo,Integer> {
     Optional<VillageInfo> findByUserInfoAndVillageStatus(UserInfo userInfo, VillageStatus villageStatus);
 
     //외래키가 등록 되지 않은 마을만 검색한다
-    List<VillageInfo> findByVillageRepNameAndVillageNumAndVillageStreetAdrAndUserInfo(
-            String villageRepName, String villageNum, String villageStreetAdr, UserInfo userInfo
+    @Query("Select v from VillageInfo v where v.villageRepName like %:villageRepName% " +
+            "and v.villageNum like %:villageNum% " +
+            "and v.villageStreetAdr like %:villageStreetAdr% " +
+            "and v.userInfo is null")
+    List<VillageInfo> findByUserNullVillageInfo(
+            @Param("villageRepName")String villageRepName,@Param("villageNum")String villageNum,
+            @Param("villageStreetAdr")String villageStreetAdr
     );
     
     //마을 리스트 검색
