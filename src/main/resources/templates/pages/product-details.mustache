@@ -51,7 +51,7 @@
                             <span class="phone"></span>
                             <br/>
                             <br/>
-                            <h3 class="price">$850</h3>
+                            <h3 class="price" id="activity-price"></h3>
                             <p class="info-text"></p>
                             <div class="row">
                                 <div class="col-lg-8 col-md-8 col-12">
@@ -102,7 +102,6 @@
                         <div class="col-lg-6 col-12">
                             <div class="info-body custom-responsive-margin">
                                 <h4>체험내용</h4>
-
                             </div>
                         </div>
                         <div class="col-lg-6 col-12">
@@ -300,9 +299,15 @@
 
     {{>pages/footer1}}
     <script>
-        function changeAct(event){
-            console.log(event);
-        }
+        const selectVal = document.getElementById('act-select');
+        selectVal.addEventListener('change',async ()=> {
+            const price = document.getElementById('activity-price');
+            const res = await fetch(`/api/activity/${selectVal.options[selectVal.selectedIndex].value}`)
+            const data = await res.json();
+            if(res.status===200){
+                price.innerHTML = data.activityPrice + " 원" ;
+            }
+        })
     </script>
     <script src="/js/village/villageInfo.js"></script>
     <script src="/js/activity/reservation.js"></script>
