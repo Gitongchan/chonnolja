@@ -29,48 +29,55 @@
     console.log(vill);
     console.log(act);
 
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 10 // 지도의 확대 레벨
-            };
-
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-    // 마커 클러스터러를 생성합니다
-    var clusterer = new kakao.maps.MarkerClusterer({
-        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-        minLevel: 10 // 클러스터 할 최소 지도 레벨
-    });
-
-    var imageSrc = '/iconimg/travel.png', // 마커이미지의 주소입니다
-            imageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
-            imageOption = {offset: new kakao.maps.Point(19, 40)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-    var markers=[];
-
-    (async ()=>{
-        const res = await fetch(`api/village/list/villageId/10000?villageActivity=${act}&villageName=${vill}&address=${adr}&page=0`);
-        const data = await res.json();
-        try{
-            if(res.ok){
-                for(let i in data){
-                    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-                            markerPosition = new kakao.maps.LatLng(`${data[i].villageLatitude}`, `${data[i].villageLongitude}`); // 마커가 표시될 위치입니다
-                    // 마커를 생성합니다
-                    var marker  = new kakao.maps.Marker({
-                        position: markerPosition,
-                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                        image: markerImage //마커 이미지 설정
-                    });
-
-                    // 마커를 지도에 표시합니다.
-                    marker.setMap(map);
 
 
-                    var content = `
+    if (navigator.geolocation) {
+        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude, // 위도
+                    lon = position.coords.longitude; // 경도
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(lat, lon), // 지도의 중심좌표
+                        level: 10 // 지도의 확대 레벨
+                    };
+            // 지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 마커 클러스터러를 생성합니다
+            var clusterer = new kakao.maps.MarkerClusterer({
+                map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+                averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+                minLevel: 10 // 클러스터 할 최소 지도 레벨
+            });
+
+            var imageSrc = '/iconimg/travel.png', // 마커이미지의 주소입니다
+                    imageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
+                    imageOption = {offset: new kakao.maps.Point(19, 40)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+            var markers=[];
+
+            (async ()=>{
+                const res = await fetch(`api/village/list/villageId/10000?villageActivity=${act}&villageName=${vill}&address=${adr}&page=0`);
+                const data = await res.json();
+                try{
+                    if(res.ok){
+                        for(let i in data){
+                            // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+                            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                                    markerPosition = new kakao.maps.LatLng(`${data[i].villageLatitude}`, `${data[i].villageLongitude}`); // 마커가 표시될 위치입니다
+                            // 마커를 생성합니다
+                            var marker  = new kakao.maps.Marker({
+                                position: markerPosition,
+                                clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                                image: markerImage //마커 이미지 설정
+                            });
+
+                            // 마커를 지도에 표시합니다.
+                            marker.setMap(map);
+
+
+                            var content = `
                         <div style="width: 260px; height: 110px;"></div>
                         <div class="wrap">
                             <div class="info">
@@ -89,41 +96,50 @@
                                 </div>
                             </div>
                         </div>`,
-                            iwRemoveable = true;
+                                    iwRemoveable = true;
 
 
-                    // 인포윈도우를 생성합니다
-                    var infowindow = new kakao.maps.InfoWindow({
-                        content : content,
-                        removable : iwRemoveable
-                    });
+                            // 인포윈도우를 생성합니다
+                            var infowindow = new kakao.maps.InfoWindow({
+                                content : content,
+                                removable : iwRemoveable
+                            });
 
 
-                    // 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
-                    // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-                    (function(marker, infowindow) {
-                        // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다
-                        kakao.maps.event.addListener(marker, 'click', function() {
-                            infowindow.open(map, marker);
-                        });
-                        // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다
-                        function closeOverlay() {
-                            overlay.setMap(null);
+                            // 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+                            // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                            (function(marker, infowindow) {
+                                // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다
+                                kakao.maps.event.addListener(marker, 'click', function() {
+                                    infowindow.open(map, marker);
+                                });
+                                // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다
+                                function closeOverlay() {
+                                    overlay.setMap(null);
+                                }
+                            })(marker, infowindow);
+
+
+                            markers.push(marker);
                         }
-                    })(marker, infowindow);
 
 
-                    markers.push(marker);
+                        clusterer.addMarkers(markers);
+
+                    }
+                }catch (e) {
+
                 }
+            })();
+        });
+
+    }
 
 
-                clusterer.addMarkers(markers);
 
-            }
-        }catch (e) {
 
-        }
-    })();
+
+
 
 
 
