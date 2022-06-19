@@ -30,6 +30,6 @@ reBtn.addEventListener('click',async ()=>{
 
     if(res.ok){
         console.log(data);
-        alert("예약성공");
+        alert(`예약완료 : ${sum}원 입금`);
     }
 })
