@@ -31,7 +31,7 @@ const checkVill = document.getElementById('checkVillage');
             const mRes = await fetch('/api/manager');
             if(mRes.status === 200){
                 const mData = await mRes.json();
-                checkCompany.value = mData.companyId;
+                checkVill.value = mData.villageId;
                 console.log(mData);
                 span_id.innerText = `${data.userid}님! 안녕하세요!`;
                 left_a.href = '/manager/mypage';

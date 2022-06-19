@@ -20,9 +20,7 @@ public class PageController {
     }
 
     @GetMapping("/pages/login")
-    public String login(){
-        return "pages/login";
-    }
+    public String login(){return "pages/login";}
 
     @GetMapping("/villageCheck")
     public String villCheck(){
@@ -69,6 +67,25 @@ public class PageController {
         return "pages/boardInfo";
     }
 
+    @GetMapping("/user/mypage")
+    public String mypageUser(){
+        return "pages/mypageUser";
+    }
+
+    @GetMapping("/manager/mypage")
+    public String mypageManager(){
+        return "pages/mypageManager";
+    }
+
+    @GetMapping("/manager/companyinfo")
+    public String mypageCompany(){
+        return "pages/mypageManagerInfo";
+    }
+
+    @GetMapping("/manager/villedit")
+    public String mypageManagerEdit(){
+        return "pages/myPageManagerInfoEdit";
+    }
 
 
     @GetMapping("/test/mainfunc")
@@ -76,5 +93,15 @@ public class PageController {
         return "pages/mainfunction";
     }
 
+
+    @GetMapping("/user/signout")
+    public String signOut(){
+        return "pages/userSignout";
+    }
+
+    @GetMapping("/user/edit")
+    public String myPageEdit(){
+        return "pages/mypageUserEdit";
+    }
 
 }

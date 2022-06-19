@@ -2,9 +2,14 @@
 //data[0].totalPage // 페이지 그룹 개수
 // 이전 버튼 : 화면에 그려진 첫번째 페이지 - 1
 // 다음 버튼 : 화면에 그려진 마지막 페이지 + 1
-const pagenation = document.querySelector('.text-center .pagination');
+const pagenation = document.querySelector('#board-wrap .text-center .pagination');
+
 (function() {
-    renderPagination(0);
+    fetch(`/api/board/list/자유게시판?page=0`)
+        .then((res)=>res.json())
+        .then((data)=>{
+            renderPagination(data.lists[0].totalPage);
+        })
 })();
 
 function renderPagination(currentPage) {
