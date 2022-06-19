@@ -42,6 +42,12 @@ public class PageController {
         return "pages/product-grids";
     }
 
+    @GetMapping("/village/addAct")
+    public String act(){return "pages/addActivity";}
+
+    @GetMapping("/village/actlist")
+    public String actlist(){return "pages/myActList";}
+
     @GetMapping("/mapsearch")
     public String searchMap(){
         return "pages/mapSearch";

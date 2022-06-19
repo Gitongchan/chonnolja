@@ -1,6 +1,7 @@
 .product-list{
     width: 100%;
     overflow: scroll;
+    border: 1px solid seagreen;
 }
 
 .product-item{
