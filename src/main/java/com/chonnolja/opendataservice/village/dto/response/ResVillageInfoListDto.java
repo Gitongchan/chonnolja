@@ -40,7 +40,7 @@ public class ResVillageInfoListDto {
     private String villagePhoto;
 
     //체험마을 조회수
-    private Integer villageViewCnt;
+    private int villageViewCnt;
 
     private int totalPage;
 

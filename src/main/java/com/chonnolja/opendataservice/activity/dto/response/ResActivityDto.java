@@ -26,7 +26,7 @@ public class ResActivityDto {
     private LocalDate activityDate;
 
     //예약가능 인원
-    private String activityStock;
+    private int activityStock;
 
     //가격
     private String activityPrice;
