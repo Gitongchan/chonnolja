@@ -76,7 +76,7 @@ public class ResVillageInfoDto {
     private String villageNotify;
     
     //체험마을 조회수
-    private Integer villageViewCnt;
+    private int villageViewCnt;
 
 
 
