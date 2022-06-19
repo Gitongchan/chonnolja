@@ -68,4 +68,15 @@ public class ActivityServiceImpl implements ActivityService {
 
         return resActivityDto;
     }
+
+    //활동 정보
+    @Override
+    public ResActivityDto activityInfo(Long activityId) {
+
+        Activity activity = activityRepository.findByActivityId(activityId).orElseThrow(
+                () -> new CustomException.ResourceNotFoundException("활동 정보를 찾을 수 없습니다")
+        );
+        return new ResActivityDto(activity);
+    }
+
 }
