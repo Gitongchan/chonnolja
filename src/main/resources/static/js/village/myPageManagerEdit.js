@@ -13,7 +13,17 @@ const villDesc = document.getElementById('vill-desc');
 const villnotify = document.getElementById('vill-notify');
 const villAct  = document.getElementById('vill-activity');
 
-const Thumb = document.getElementById('thumb-preview');
+const content_Thumimg = document.getElementById('thumb-preview');
+const content_img = document.getElementById('current-image-preview');
+
+//썸네일 관련 태그들
+const thumImg = document.createElement('img');
+const thumDivImg = document.createElement('div');
+const thumDeleteButton = document.createElement('button');
+
+const delThumbFile = {
+    deletedThumFile  : []
+};
 
 (async function() {
     try {
@@ -26,11 +36,24 @@ const Thumb = document.getElementById('thumb-preview');
                 const res = await fetch('/api/manager')
                 const data = await res.json();
 
-                Thumb.innerHTML = `
-                <div class="current-img">
-                <img class="img-item" src=${data.villagePhoto!==null?data.villagePhoto:"https://via.placeholder.com/335x335/?text=No+Image"} alt="#"/>
-                </div>
-                `
+                //썸네일
+                thumDivImg.classList.add(`current-img`);
+                thumDivImg.id= `${data.villagePhoto.substr(21)}`
+                thumDeleteButton.classList.add('img-btn-delete','btn-danger');
+                thumDeleteButton.innerText = 'X';
+                thumImg.classList.add(`img-item`);
+                thumImg.src= data.villagePhoto;
+
+                thumDeleteButton.addEventListener('click',(e)=>{
+                    console.log(e);
+                    delThumbFile.deletedThumFile.push({"value":e.target.offsetParent.id});
+                    e.target.parentElement.remove();
+                })
+
+                thumDivImg.appendChild(thumImg);
+                thumDivImg.appendChild(thumDeleteButton);
+                content_Thumimg.appendChild(thumDivImg);
+
                 villname.value = data.villageName;
                 villStreet.value = data.villageStreetAdr
                 villRepName.value = data.villageRepName;

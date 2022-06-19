@@ -1,0 +1,151 @@
+{{>pages/header1}}
+<link rel="stylesheet" href="/css/mypageUser.css">
+<link rel="stylesheet" href="/css/mypageManager.css">
+<link rel="stylesheet" href="/css/board.css">
+
+{{>pages/header2}}
+
+<!-- Cotainer는 그렇게 양쪽 여백을 주게 되어있고  fluid 뭐시기는 여백 없음-->
+<div class="container">
+    <div class="row">
+        <section class="mypage_sidebar">
+            {{>pages/mypageManagerNAV}}
+            <article class="mypage_article">
+                <h3>마을정보</h3>
+                <div id="thumb-preview" class="detail-inner">
+                </div>
+                <input type="file" id="thumb-file"/>
+                <div class="col-sm-12 cn_name">
+                    <div class="form-group">
+                        <label for="villname">마을명</label>
+                        <input class="form-control" type="text" id="villname" readonly/>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="villStreet">주소</label>
+                        <input type="text" class="form-control col-sm-8 col-8" id="villStreet" placeholder="주소" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="villRepName">대표자 명</label>
+                        <input type="text" class="form-control" id="villRepName" placeholder="대표자 명" readonly>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="villUrl">홈페이지 주소</label>
+                        <input type="text" class="form-control" id="villUrl" placeholder="홈페이지 주소" >
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <span id="guide" style="color:#999;display:none"></span>
+                        <label for="villProvider">기관코드</label>
+                        <input type="text" class="form-control" id="villProvider" placeholder="상세주소" readonly >
+                        <!--                                    <input type="text" class="form-control" id="sample4_extraAddress" placeholder="참고항목">-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="villProvider">은행명</label>
+                            <input type="text" class="form-control" id="vill-bankname" placeholder="은행" >
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="villProvider">계좌번호</label>
+                            <input type="text" class="form-control" id="vill-bankNum" placeholder="계좌번호" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="vill-desc">설명</label>
+                        <input type="text" class="form-control" id="vill-desc" placeholder="설명" >
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="vill-notify">공지사항</label>
+                        <input type="text" class="form-control" id="vill-notify" placeholder="주의사항" >
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="vill-activity">체험활동 종류</label>
+                        <input type="text" class="form-control" id="vill-activity" placeholder="체험활동 종류" >
+                    </div>
+                </div>
+                <div class="manager-top">
+                <span class="button">
+                        <button class="btn" id="village-btn">수정</button>
+                    </span>
+                </div>
+            </article>
+        </section>
+    </div>
+</div>
+
+{{>pages/footer1}}
+<!--  이곳에 페이지 별 js 로드시키기-->
+<!--  예시 : <script src="/js/dummydata.js"></script> -->
+<script src="/js/village/myPageManagerEdit.js"></script>
+<script src="/js/village/villageThumb.js"></script>
+<script>
+    document.querySelector('#village-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        //토큰 값
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+        const token = document.querySelector('meta[name="_csrf"]').content;
+
+        //폼 생성
+        const formData = new FormData();
+        //input file, 이미지에 대한 정보 가져옴
+        let thumb = document.querySelector('#thumb-file');
+        const viilageData = {
+            "villageActivity":document.getElementById('vill-activity').value,
+            "villageUrl":document.getElementById('villUrl').value,
+            "villageBankNum":document.getElementById('vill-bankNum').value,
+            "villageBankName":document.getElementById('vill-bankname').value,
+            "villageDescription":document.getElementById('vill-desc').value,
+            "villagePhoto":"",
+            "villageNotify":document.getElementById('vill-notify').value
+        }
+        console.log(thumb);
+        console.log(viilageData);
+
+        formData.append(
+                "villageInfoDto",
+                new Blob([JSON.stringify(viilageData)], {type: "application/json"})
+        );
+        formData.append('thumbFile', thumb.files.length===0 ? null:thumb.files[0]);
+        formData.append("deletedThumb",delThumbFile.deletedThumFile.length===0?null:delThumbFile.deletedThumFile[0]);
+
+        fetch(`/api/manager/update/${checkVill.value}`, {
+            method: "PUT",
+            headers: {
+                'header': header,
+                'processData': false,
+                'contentType': false,
+                'X-CSRF-Token': token
+            },
+            body: formData
+        })
+                .then(res => {
+                    if (res.status === 200 || res.status === 201) { // 성공을 알리는 HTTP 상태 코드면
+                        alert("마을정보 수정 완료");
+                    } else { // 실패를 알리는 HTTP 상태 코드면
+                        console.error(res.statusText);
+                        console.error(res);
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+        // ...
+    });
+</script>
+
+{{>pages/footer2}}

@@ -71,7 +71,9 @@ changeOK.addEventListener('click',function(e) {
         body: JSON.stringify(userData),
     })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => {
+            alert("정보 변경완료");
+        })
 
 })
 

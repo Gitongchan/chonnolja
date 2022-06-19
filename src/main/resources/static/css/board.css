@@ -4,21 +4,21 @@
 
 .pagination {
     display: flex !important;
-}
-
-.text-center{
-    display: flex;
+    align-items: center;
     justify-content: center;
-    height: 100px;
 }
 
 #board-wrap{
-    height: 500px;
+    height: 600px;
     margin-bottom: 20px;
 }
 
 #boardtable{
     width: 100%;
+}
+
+#board-table-wrap{
+    height: 400px;
 }
 
 .current-img{
@@ -113,8 +113,4 @@
     border-style: none;
     color:white;
     box-shadow : 5px 5px 10px -5px;
-}
-
-#save-Thumb{
-    text-align: center;
 }
