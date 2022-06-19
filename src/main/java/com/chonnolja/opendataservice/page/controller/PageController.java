@@ -20,9 +20,7 @@ public class PageController {
     }
 
     @GetMapping("/pages/login")
-    public String login(){
-        return "pages/login";
-    }
+    public String login(){return "pages/login";}
 
     @GetMapping("/villageCheck")
     public String villCheck(){
