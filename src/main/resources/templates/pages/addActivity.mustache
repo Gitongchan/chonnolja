@@ -1,0 +1,122 @@
+{{>pages/header1}}
+<link rel="stylesheet" href="/css/activity.css">
+<link rel="stylesheet" href="/css/mypageUser.css">
+<link rel="stylesheet" href="/css/mypageManager.css">
+<!-- jQuery UI CSS파일  -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+<!-- jQuery 기본 js파일 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- jQuery UI 라이브러리 js파일 -->
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+{{>pages/header2}}
+
+<div class="container">
+    <div class="row">
+        <section class="mypage_sidebar">
+            {{>pages/mypageManagerNAV}}
+            <article class="product-article">
+                <div class="product-inputinfo">
+
+                    <div class="col-sm-12 mb-10">
+                        <div class="form-group input-group">
+                            <label for="vill-act" class="m-auto">체험명</label>
+                            <input class="form-control" type="text" id="vill-act">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-10">
+                        <div class="form-group input-group">
+                            <label for="act-date" class="m-auto">날짜</label>
+                            <input class="form-control" type="text" id="act-date" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-10">
+                        <div class="form-group input-group">
+                            <label for="act-price" class="m-auto">가격</label>
+                            <input class="form-control" type="text" id="act-price">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-10">
+                        <div class="form-group input-group">
+                            <label for="act-stock" class="m-auto">총 인원</label>
+                            <input class="form-control" type="text" id="act-stock">
+                        </div>
+                    </div>
+                    <div class="button text-center">
+                        <button class="btn" id="act-btn">등록하기</button>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
+</div>
+{{>pages/footer1}}
+<!--  이곳에 페이지 별 js 로드시키기-->
+<!--  예시 : <script src="/js/dummydata.js"></script> -->
+<script type="text/javascript">
+    $(function () {
+        $("#act-date").datepicker({
+            dateFormat:"yy-mm-dd",
+            dayNamesMin:["일","월","화","수","목","금","토"],
+            monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
+            onSelect:function(d){
+                alert(d+" 선택되었습니다");
+
+                var arr=d.split("-");
+                var year=arr[0];
+                var month=arr[1];
+                var day=arr[2];
+
+                $("#year").text(year);
+                $("#month").text(month);
+                $("#day").text(day);
+
+                //요일 가져오기
+                //데이터를 먼저 가져오고 (숫자로 넘어옴)
+                var date=new Date($("#date").datepicker({dateFormat:"yy/mm/dd"}).val());
+                //일요일 0~
+                //alert("date:"+date.getDay());
+
+                week=new Array("일","월","화","수","목","금","토");
+                $("#mydate").text(week[date.getDay()]);
+            }
+        });
+
+    });
+</script>
+
+<script>
+    document.querySelector('#act-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        //토큰 값
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+        const token = document.querySelector('meta[name="_csrf"]').content;
+        const actData = {
+            "activityName": document.getElementById('vill-act').value,
+            "activityDate": document.getElementById('act-date').value,
+            "activityStock": document.getElementById('act-stock').value,
+            "activityPrice": document.getElementById('act-price').value
+        }
+        fetch("/api/manager/activity/save", {
+            method: "POST",
+            headers: {
+                'header': header,
+                'X-CSRF-Token': token,
+                'X-Requested-With': 'XMLHttpRequest',
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(actData)
+        })
+                .then(res => {
+                    if (res.status === 200 || res.status === 201) { // 성공을 알리는 HTTP 상태 코드면
+                        alert("상품등록 완료");
+                    } else { // 실패를 알리는 HTTP 상태 코드면
+                        console.error(res.statusText);
+                        console.error(res);
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+        // ...
+    });
+</script>
+{{>pages/footer2}}

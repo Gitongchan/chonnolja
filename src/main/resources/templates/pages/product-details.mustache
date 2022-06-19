@@ -54,27 +54,23 @@
                             <p class="info-text"></p>
                             <div class="row">
                                 <div class="col-lg-8 col-md-8 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="selectVal">
                                         <label for="color">체험활동</label>
-                                        <select class="form-control" id="color">
-                                            <option>5100 mAh</option>
-                                            <option>6200 mAh</option>
-                                            <option>8000 mAh</option>
-                                            <option>8000 mAh</option>
+                                        <select class="form-control" id="act-select">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <div class="form-group quantity">
                                         <label for="color">인원 수</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
-                                            <option>7</option>
+                                        <select class="form-control" id="quan">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
 
                                         </select>
                                     </div>
@@ -86,7 +82,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="button cart-button">
-                                            <button class="btn" style="width: 100%;">신청하기</button>
+                                            <button class="btn" id="act-reservation" style="width: 100%;">신청하기</button>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
@@ -305,5 +301,11 @@
     <!-- End Review Modal -->
 
     {{>pages/footer1}}
+    <script>
+        function changeAct(event){
+            console.log(event);
+        }
+    </script>
     <script src="/js/village/villageInfo.js"></script>
+    <script src="/js/activity/reservation.js"></script>
     {{>pages/footer2}}
