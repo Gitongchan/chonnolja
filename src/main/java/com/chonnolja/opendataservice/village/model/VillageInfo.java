@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -111,6 +112,7 @@ public class VillageInfo {
 
     //조회수
     @Column(name = "village_view_cnt")
+    @ColumnDefault("0")
     private Integer villageViewCnt;
 
     @Builder
