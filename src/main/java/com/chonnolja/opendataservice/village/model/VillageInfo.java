@@ -113,7 +113,7 @@ public class VillageInfo {
     //조회수
     @Column(name = "village_view_cnt")
     @ColumnDefault("0")
-    private Integer villageViewCnt;
+    private int villageViewCnt;
 
     @Builder
     public VillageInfo(Long villageId, UserInfo userInfo, String villageName, String villageRepName,
@@ -122,7 +122,7 @@ public class VillageInfo {
                        String villageUrl, String villageProviderCode, String villageProviderName,
                        String villageBankName,String villageBankNum, VillageStatus villageStatus, LocalDateTime villageDeletedDate,
                        String villageActivity, String villagePhoto, String villageDescription,
-                       String villageNotify,Integer villageViewCnt) {
+                       String villageNotify,int villageViewCnt) {
         this.villageId = villageId;
         this.userInfo = userInfo;
         this.villageName = villageName;

@@ -37,7 +37,7 @@ public class Activity {
 
     //예약가능 인원
     @Column(name = "activity_stock")
-    private String activityStock;
+    private int activityStock;
 
     //가격
     @Column(name = "activity_price")
@@ -45,7 +45,7 @@ public class Activity {
 
     @Builder
     public Activity(Long activityId, VillageInfo activityVillageInfo, String activityName,
-                    LocalDate activityDate, String activityStock, String activityPrice) {
+                    LocalDate activityDate, int activityStock, String activityPrice) {
         this.activityId = activityId;
         this.activityVillageInfo = activityVillageInfo;
         this.activityName = activityName;
