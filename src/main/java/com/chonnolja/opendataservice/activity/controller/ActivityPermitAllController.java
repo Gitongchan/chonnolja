@@ -21,4 +21,10 @@ public class ActivityPermitAllController {
     public List<ResActivityDto> activityList(@PathVariable("villageId") Long villageId){
     return activityService.activityList(villageId);
     }
+
+    //체험 활동 정보
+    @GetMapping("/{activityId}")
+    public ResActivityDto activityInfo(@PathVariable("activityId") Long activityId){
+        return activityService.activityInfo(activityId);
+    }
 }

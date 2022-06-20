@@ -1,5 +1,6 @@
 package com.chonnolja.opendataservice.activity.dto.response;
 
+import com.chonnolja.opendataservice.activity.model.Activity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,4 +31,13 @@ public class ResActivityDto {
 
     //가격
     private String activityPrice;
+
+    public ResActivityDto(Activity activity) {
+        this.activityId = activity.getActivityId();
+        this.villageId = activity.getActivityVillageInfo().getVillageId();
+        this.activityName = activity.getActivityName();
+        this.activityDate = activity.getActivityDate();
+        this.activityStock = activity.getActivityStock();
+        this.activityPrice = activity.getActivityPrice();
+    }
 }

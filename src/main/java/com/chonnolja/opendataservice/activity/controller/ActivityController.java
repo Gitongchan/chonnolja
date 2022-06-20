@@ -25,4 +25,7 @@ public class ActivityController {
     }
     
     //활동 삭제
+
+
+
 }

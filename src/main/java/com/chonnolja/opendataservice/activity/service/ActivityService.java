@@ -14,5 +14,8 @@ public interface ActivityService {
     
     //활동 조회
     List<ResActivityDto> activityList(Long villageId);
+    
+    //활동 정보
+    ResActivityDto activityInfo(Long activityId);
 
 }
