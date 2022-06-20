@@ -15,6 +15,7 @@ const selectAct = document.getElementById('act-select');
 const mainImg = document.getElementById('vill-main-img');
 const villDesc = document.getElementById('desc');
 const villNoti = document.getElementById('notify');
+const actText = document.getElementById('testtt');
 
 
 (async ()=>{
@@ -26,7 +27,8 @@ const villNoti = document.getElementById('notify');
         title.innerText = data.villageName;
         name.innerText = data.villageRepName;
         phone.innerText = "대표번호: " + data.villageNum;
-        info.innerText = "주소 : " + data.villageStreetAdr;
+        info.innerText = "주소: " + data.villageStreetAdr;
+        actText.innerText = "활동목록: "+ data.villageActivity;
         mainImg.innerHTML+=
             `
                 <img src=${data.villagePhoto!==null? data.villagePhoto:"https://via.placeholder.com/1000x670"} id="current" alt="#">
